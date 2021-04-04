@@ -15,7 +15,7 @@ class _RoomDetailsState extends State<RoomDetails> {
     Map data = {'sensor': "1"};
     var response =
         await http.post(DotEnv().env['IBM_CLOUD'] + "/sensorData", body: data);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       jsonResponse = jsonDecode(response.body);
     }
     print("jsonResponse ${jsonResponse['data']}");
@@ -192,7 +192,7 @@ class _RoomDetailsState extends State<RoomDetails> {
     Map data = {'control': control};
     var response =
         await http.post(DotEnv().env['IBM_CLOUD'] + "/led", body: data);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       print('Response : ${response.body}');
     }

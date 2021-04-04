@@ -3,7 +3,7 @@ import 'app_logger.dart';
 class AppBaseError {
   final int code;
   final String description;
-  final StackTrace stack;
+  final String stack;
 
   AppBaseError({
     this.code = 1000,
@@ -40,6 +40,6 @@ class ValidationError {
 }
 
 class NetworkError {
-  static AppBaseError unknown(int code, String description, StackTrace stack) =>
+  static AppBaseError unknown(int code, String description, String stack) =>
       AppBaseError(code: code, description: description, stack: stack);
 }

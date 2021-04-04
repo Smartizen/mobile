@@ -111,7 +111,7 @@ class _RoomState extends State<Room> {
     Map data = {'control': control};
     var response =
         await http.post(DotEnv().env['IBM_CLOUD'] + "/led", body: data);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       print('Response : ${response.body}');
     }
