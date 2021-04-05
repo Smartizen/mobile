@@ -98,15 +98,6 @@ class _RoomDetailsState extends State<RoomDetails> {
                         fontSize: 21,
                         color: Colors.white.withOpacity(0.7)),
                   ),
-                  // Visibility(
-                  //   visible: widget.image == null ? false : true,
-                  //   child: Center(
-                  //       child: Container(
-                  //     height: 100,
-                  //     width: 100,
-                  //     child: widget.image ?? null,
-                  //   )),
-                  // ),
                   Text(
                     hum + "%",
                     style: TextStyle(

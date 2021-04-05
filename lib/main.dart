@@ -9,12 +9,12 @@ import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/reducers.dart';
 
 import 'package:smartizen/Screens/Home.dart';
+import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/Room.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/SignUpScreen.dart';
 
 import 'package:smartizen/utils/app_logger.dart';
-import 'package:smartizen/utils/http.dart';
 
 Future main() async {
   AppLogger()..isDebug = true;
@@ -47,7 +47,8 @@ class MyApp extends StatelessWidget {
             'SignIn': (context) => SignInScreen(),
             'SignUp': (context) => SignUpScreen(),
             'Home': (context) => Home(),
-            'Room': (context) => Room()
+            'Room': (context) => Room(),
+            "Profile": (context) => Profile()
           },
         ));
   }

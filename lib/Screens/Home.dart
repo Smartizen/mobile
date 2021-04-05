@@ -5,6 +5,7 @@ import "package:shared_preferences/shared_preferences.dart";
 import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/my_view.dart';
 
@@ -263,7 +264,12 @@ class _HomeState extends State<Home> {
                         color: Colors.white.withOpacity(0.1),
                         size: 30,
                       ),
-                      onPressed: null),
+                      onPressed: () {
+                        Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) => Profile()),
+                            ModalRoute.withName('/Profile'));
+                      }),
                   IconButton(
                       icon: Icon(
                         Icons.notifications,
