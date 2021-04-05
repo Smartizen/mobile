@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartizen/Screens/Houses/Component/body.dart';
 
 class Houses extends StatefulWidget {
   @override
@@ -35,14 +36,14 @@ class _HousesState extends State<Houses> {
                       "Housing management",
                       style: TextStyle(
                           fontFamily: "SF Rounded",
-                          fontSize: 32,
+                          fontSize: 24,
                           color: Colors.white),
                     )
                   ],
                 )),
           ),
-          SizedBox(height: 50),
-          // Expanded(child: HousesBody()),
+          SizedBox(height: 10),
+          Expanded(child: HousesBody()),
         ],
       ),
     );

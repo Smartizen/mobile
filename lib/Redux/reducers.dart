@@ -7,7 +7,6 @@ AppState appReducer(state, action) {
 
 userReducer(user, action) {
   if (action is GetUserAction) {
-    print(action.user);
     return action.user;
   }
   return user;

@@ -226,7 +226,6 @@ class _HomeState extends State<Home> {
             child: GestureDetector(
               onTap: () {
                 createRoom(context).then((value) => print(value));
-                print("nav tapped");
               },
               child: Container(
                 width: 70,

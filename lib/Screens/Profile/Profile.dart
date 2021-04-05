@@ -37,7 +37,7 @@ class _ProfileState extends State<Profile> {
                       "Profile",
                       style: TextStyle(
                           fontFamily: "SF Rounded",
-                          fontSize: 32,
+                          fontSize: 24,
                           color: Colors.white),
                     )
                   ],

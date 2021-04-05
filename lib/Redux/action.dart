@@ -10,12 +10,9 @@ import 'dart:convert';
 import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/Home.dart';
 
-// ThunkAction<AppState> getUserAction = (Store<AppState> store) async {
-//   final prefs = await SharedPreferences.getInstance();
-//   final String storeUser = prefs.getString('user');
-//   final user = storeUser != null ? json.decode(storeUser) : null;
-//   store.dispatch(GetUserAction(user));
-// };
+////////////////////////////////////////////
+/// User
+////////////////////////////////////////////
 
 ThunkAction<AppState> signin(context, String email, String password) {
   Map data = {'email': email, 'password': password};
@@ -68,4 +65,35 @@ class GetUserAction {
   final dynamic _user;
   dynamic get user => this._user;
   GetUserAction(this._user);
+}
+
+////////////////////////////////////////////
+/// House
+////////////////////////////////////////////
+
+ThunkAction<AppState> createHouse(context, String houseName, String location) {
+  Map data = {
+    'name': houseName,
+    'location': location,
+    'image': 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+  };
+
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response = await http.post(UrlProvider.createNewHouse,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: data);
+    if (response.statusCode == 201) {
+      jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      // TODO add to Farm array
+    } else {
+      print(response.body);
+    }
+  };
 }

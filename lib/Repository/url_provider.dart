@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class UrlProvider {
   static String base = DotEnv().env['API_URL'];
 
+  /// url auth
   static String get auth {
     return '$base/auth';
   }
@@ -15,11 +16,16 @@ class UrlProvider {
     return '$base/auth/signup';
   }
 
-  // static String ticket(String id) {
-  //   return '$base/tickets/$id';
-  // }
+  /// url house
+  static String get createNewHouse {
+    return '$base/farm';
+  }
 
-  // static String ticketBookmark(String id) {
-  //   return '$base/tickets/$id/bookmark';
-  // }
+  static String get getHouses {
+    return '$base/farm/myFarm';
+  }
+
+  static String getHouseDetail(String id) {
+    return '$base/farm/$id';
+  }
 }

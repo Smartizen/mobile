@@ -9,6 +9,7 @@ import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/reducers.dart';
 
 import 'package:smartizen/Screens/Home.dart';
+import 'package:smartizen/Screens/Houses/Houses.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/Room.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
@@ -48,7 +49,8 @@ class MyApp extends StatelessWidget {
             'SignUp': (context) => SignUpScreen(),
             'Home': (context) => Home(),
             'Room': (context) => Room(),
-            "Profile": (context) => Profile()
+            'Profile': (context) => Profile(),
+            'Houses': (context) => Houses()
           },
         ));
   }
