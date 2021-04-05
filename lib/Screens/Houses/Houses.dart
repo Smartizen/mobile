@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:smartizen/Screens/Home.dart';
-import 'package:smartizen/Screens/Profile/Component/body.dart';
 
-class Profile extends StatefulWidget {
+class Houses extends StatefulWidget {
   @override
-  _ProfileState createState() => _ProfileState();
+  _HousesState createState() => _HousesState();
 }
 
-class _ProfileState extends State<Profile> {
+class _HousesState extends State<Houses> {
   void initState() {
     super.initState();
   }
@@ -34,7 +32,7 @@ class _ProfileState extends State<Profile> {
                           Navigator.pop(context);
                         }),
                     Text(
-                      "Profile",
+                      "Housing management",
                       style: TextStyle(
                           fontFamily: "SF Rounded",
                           fontSize: 32,
@@ -44,7 +42,7 @@ class _ProfileState extends State<Profile> {
                 )),
           ),
           SizedBox(height: 50),
-          Expanded(child: ProfileBody()),
+          // Expanded(child: HousesBody()),
         ],
       ),
     );

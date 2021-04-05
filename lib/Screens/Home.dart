@@ -268,10 +268,10 @@ class _HomeState extends State<Home> {
                         size: 30,
                       ),
                       onPressed: () {
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) => Profile()),
-                            ModalRoute.withName('/Profile'));
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Profile()),
+                        );
                       }),
                   IconButton(
                       icon: Icon(
