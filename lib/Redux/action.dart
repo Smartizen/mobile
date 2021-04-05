@@ -41,6 +41,29 @@ ThunkAction<AppState> signin(context, String email, String password) {
   };
 }
 
+ThunkAction<AppState> auth() {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response = await http.get(UrlProvider.auth, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      if (jsonResponse != null) {
+        store.dispatch(GetUserAction(jsonResponse["user"]));
+      }
+    } else {
+      print(response.body);
+    }
+  };
+}
+
 class GetUserAction {
   final dynamic _user;
   dynamic get user => this._user;

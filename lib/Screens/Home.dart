@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import "package:shared_preferences/shared_preferences.dart";
 import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
+import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
@@ -24,8 +25,7 @@ class _HomeState extends State<Home> {
 
   checkLoginStatus() async {
     sharedPreferences = await SharedPreferences.getInstance();
-    if (sharedPreferences.getString("token") == null &&
-        sharedPreferences.getString("lastname") == null) {
+    if (sharedPreferences.getString("token") == null) {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
           ModalRoute.withName('/SignIn'));
@@ -64,6 +64,9 @@ class _HomeState extends State<Home> {
         backgroundColor: const Color(0xff202227),
         body: Container(
             child: StoreConnector<AppState, AppState>(
+                onInit: (store) {
+                  store.dispatch(auth());
+                },
                 converter: (store) => store.state,
                 builder: (context, state) {
                   return Column(

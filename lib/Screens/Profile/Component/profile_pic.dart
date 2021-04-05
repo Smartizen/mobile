@@ -64,6 +64,13 @@ class ProfilePic extends StatelessWidget {
                             fontSize: 32,
                             color: Colors.white),
                       ),
+                      Text(
+                        state.user["email"],
+                        style: TextStyle(
+                            fontFamily: "SF Rounded",
+                            fontSize: 18,
+                            color: Colors.white.withOpacity(0.6)),
+                      ),
                     ]);
               }),
         )
