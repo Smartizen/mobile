@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Screens/Houses/Component/houses_list_items.dart';
 
 class HousesBody extends StatefulWidget {
+  HousesBody({this.items});
+
+  final List<HousesModel> items;
   @override
   _HousesBodyState createState() => _HousesBodyState();
 }
@@ -54,6 +59,9 @@ class _HousesBodyState extends State<HousesBody> {
     return Scaffold(
         backgroundColor: const Color(0xff202227),
         body: StoreConnector<AppState, AppState>(
+            onInit: (store) {
+              store.dispatch(getHousesData());
+            },
             converter: (store) => store.state,
             builder: (context, state) {
               return Stack(
@@ -76,36 +84,21 @@ class _HousesBodyState extends State<HousesBody> {
                         overflow: Overflow.visible,
                         children: <Widget>[
                           Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  topRight: Radius.circular(40),
-                                  topLeft: Radius.circular(40)),
-                            ),
-                            child: ListView.builder(
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text(
-                                    "Task No $index",
-                                    style: TextStyle(
-                                        color: Colors.grey[900],
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                  subtitle: Text(
-                                    "This is the detail of task No $index",
-                                    style: TextStyle(color: Colors.grey[700]),
-                                  ),
-                                  trailing: Icon(
-                                    Icons.check_circle,
-                                    color: Colors.greenAccent,
-                                  ),
-                                  isThreeLine: true,
-                                );
-                              },
-                              controller: scrolController,
-                              itemCount: 20,
-                            ),
-                          ),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(40),
+                                    topLeft: Radius.circular(40)),
+                              ),
+                              child: ListView.builder(
+                                  physics: AlwaysScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return HouseListItem(
+                                        itemIndex: index,
+                                        housesModel: state.houses[index]);
+                                  },
+                                  controller: scrolController,
+                                  itemCount: state.houses.length)),
                           Positioned(
                             child: FloatingActionButton(
                               child: Icon(
