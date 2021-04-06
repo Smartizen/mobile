@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -96,4 +97,39 @@ ThunkAction<AppState> createHouse(context, String houseName, String location) {
       print(response.body);
     }
   };
+}
+
+ThunkAction<AppState> getHousesData() {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response = await http.get(UrlProvider.getHouses, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse != null) {
+        store
+            .dispatch(GetHousesAction(_loadHousesModel(jsonResponse["farms"])));
+      }
+    } else {
+      print(response.body);
+    }
+  };
+}
+
+List<HousesModel> _loadHousesModel(houses) {
+  final items = houses as List;
+  return items.map((item) => HousesModel.fromJson(item)).toList();
+}
+
+class GetHousesAction {
+  final List<HousesModel> _houses;
+  List<HousesModel> get houses => this._houses;
+  GetHousesAction(this._houses);
 }
