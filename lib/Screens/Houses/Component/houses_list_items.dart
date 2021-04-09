@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Models/houses.dart';
+import 'package:smartizen/Screens/Home.dart';
 
 class HouseListItem extends StatelessWidget {
   const HouseListItem({
@@ -29,7 +31,15 @@ class HouseListItem extends StatelessWidget {
             color: Colors.greenAccent,
           ),
           isThreeLine: true,
-          onTap: () => print(housesModel)),
+          onTap: () => selectHouseDefault(context, housesModel)),
     );
+  }
+
+  selectHouseDefault(context, housesModel) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("houseID", housesModel.toJson()["id"]);
+    Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (BuildContext context) => Home()),
+        ModalRoute.withName('/Home'));
   }
 }

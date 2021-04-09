@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
             child: StoreConnector<AppState, AppState>(
                 onInit: (store) {
                   store.dispatch(auth());
+                  store.dispatch(getDefaultHousesData());
                 },
                 converter: (store) => store.state,
                 builder: (context, state) {
@@ -200,6 +201,15 @@ class _HomeState extends State<Home> {
                                       Icons.home,
                                       color: Colors.white.withOpacity(0.25),
                                     ),
+                                    IconButton(
+                                        icon: Icon(
+                                          Icons.notifications,
+                                          color: Colors.white.withOpacity(0.1),
+                                          size: 30,
+                                        ),
+                                        onPressed: () {
+                                          print(state.defaultHouse);
+                                        }),
                                     Text(
                                       "Hai Ba Trung, Ha Noi",
                                       style: TextStyle(
@@ -207,7 +217,7 @@ class _HomeState extends State<Home> {
                                           fontSize: 16,
                                           color:
                                               Colors.white.withOpacity(0.25)),
-                                    )
+                                    ),
                                   ],
                                 )
                               ],

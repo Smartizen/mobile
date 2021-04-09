@@ -4,7 +4,8 @@ import 'package:smartizen/Redux/app_state.dart';
 AppState appReducer(state, action) {
   return AppState(
       user: userReducer(state.user, action),
-      houses: housesReducer(state.houses, action));
+      houses: housesReducer(state.houses, action),
+      defaultHouse: defaultHousesReducer(state.defaultHouse, action));
 }
 
 userReducer(user, action) {
@@ -19,4 +20,12 @@ housesReducer(houses, action) {
     return action.houses;
   }
   return houses;
+}
+
+defaultHousesReducer(defaultHouse, action) {
+  if (action is GetDefaultHouseAction) {
+    // print(action.defaultHouse);
+    return action.defaultHouse;
+  }
+  return defaultHouse;
 }

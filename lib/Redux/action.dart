@@ -2,7 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:smartizen/Models/default_house.dart';
 import 'package:smartizen/Models/houses.dart';
+import 'package:smartizen/Models/members.dart';
+import 'package:smartizen/Models/rooms.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
@@ -52,7 +55,6 @@ ThunkAction<AppState> auth() {
     });
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
-      print(jsonResponse);
       if (jsonResponse != null) {
         store.dispatch(GetUserAction(jsonResponse["user"]));
       }
@@ -132,4 +134,44 @@ class GetHousesAction {
   final List<HousesModel> _houses;
   List<HousesModel> get houses => this._houses;
   GetHousesAction(this._houses);
+}
+
+ThunkAction<AppState> getDefaultHousesData() {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var houseID = sharedPreferences.getString("houseID");
+    var jsonResponse;
+
+    var response =
+        await http.get(UrlProvider.getHouseDetail(houseID), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse != null) {
+        final members = jsonResponse["members"] as List;
+        final rooms = jsonResponse["rooms"] as List;
+        final _defaultHouse = DefaultHouse(
+            id: jsonResponse["id"],
+            name: jsonResponse["name"],
+            image: jsonResponse["image"],
+            location: jsonResponse["location"],
+            members: members.map((member) => Members.fromJson(member)).toList(),
+            rooms: rooms.map((room) => Rooms.fromJson(room)).toList());
+        store.dispatch(GetDefaultHouseAction(_defaultHouse));
+      }
+    } else {
+      print(response.body);
+    }
+  };
+}
+
+class GetDefaultHouseAction {
+  final DefaultHouse _defaultHouse;
+  DefaultHouse get defaultHouse => this._defaultHouse;
+  GetDefaultHouseAction(this._defaultHouse);
 }

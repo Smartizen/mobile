@@ -4,6 +4,8 @@ class HousesModel {
   final String image;
   final String location;
 
+  HousesModel({this.name, this.id, this.image, this.location});
+
   HousesModel.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
