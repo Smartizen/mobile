@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
+import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/default_house.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Models/members.dart';
@@ -12,7 +13,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:smartizen/Repository/url_provider.dart';
-import 'package:smartizen/Screens/Home.dart';
+import 'package:smartizen/Screens/Home/Home.dart';
 
 ////////////////////////////////////////////
 /// User
@@ -161,7 +162,13 @@ ThunkAction<AppState> getDefaultHousesData() {
             image: jsonResponse["image"],
             location: jsonResponse["location"],
             members: members.map((member) => Members.fromJson(member)).toList(),
-            rooms: rooms.map((room) => Rooms.fromJson(room)).toList());
+            rooms: rooms.map((room) => Rooms.fromJson(room)).toList(),
+            roomBoxs: rooms
+                .map((room) => ApplianceBox(
+                      title: room["name"],
+                      boxInfo: room["devices"].length.toString() + " Thiết bị",
+                    ))
+                .toList());
         store.dispatch(GetDefaultHouseAction(_defaultHouse));
       }
     } else {

@@ -8,7 +8,7 @@ import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
-import 'package:smartizen/my_view.dart';
+import 'package:smartizen/Screens/Home/Component/room.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -201,17 +201,8 @@ class _HomeState extends State<Home> {
                                       Icons.home,
                                       color: Colors.white.withOpacity(0.25),
                                     ),
-                                    IconButton(
-                                        icon: Icon(
-                                          Icons.notifications,
-                                          color: Colors.white.withOpacity(0.1),
-                                          size: 30,
-                                        ),
-                                        onPressed: () {
-                                          print(state.defaultHouse);
-                                        }),
                                     Text(
-                                      "Hai Ba Trung, Ha Noi",
+                                      " " + state.defaultHouse.name,
                                       style: TextStyle(
                                           fontFamily: "SF Rounded",
                                           fontSize: 16,
@@ -225,7 +216,7 @@ class _HomeState extends State<Home> {
                           ),
                         ]),
                       ),
-                      Expanded(child: MyView())
+                      Expanded(child: Room())
                     ],
                   );
                 })),

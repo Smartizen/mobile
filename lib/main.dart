@@ -8,7 +8,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/reducers.dart';
 
-import 'package:smartizen/Screens/Home.dart';
+import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Houses/Houses.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/Room.dart';

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:smartizen/Screens/Home.dart';
 import 'package:smartizen/Screens/Profile/Component/body.dart';
 
 class Profile extends StatefulWidget {

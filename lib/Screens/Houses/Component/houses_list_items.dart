@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Models/houses.dart';
-import 'package:smartizen/Screens/Home.dart';
+import 'package:smartizen/Screens/Home/Home.dart';
 
 class HouseListItem extends StatelessWidget {
   const HouseListItem({

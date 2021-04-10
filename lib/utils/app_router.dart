@@ -1,6 +1,6 @@
 import 'package:flutter_redux/flutter_redux.dart';
 
-import 'package:smartizen/Screens/Home.dart';
+import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Room.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/SignUpScreen.dart';

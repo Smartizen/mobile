@@ -1,3 +1,4 @@
+import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
 
@@ -8,6 +9,7 @@ class DefaultHouse {
   String location;
   List<Members> members;
   List<Rooms> rooms;
+  List<ApplianceBox> roomBoxs;
 
   DefaultHouse(
       {this.name,
@@ -15,7 +17,8 @@ class DefaultHouse {
       this.image,
       this.location,
       this.members,
-      this.rooms});
+      this.rooms,
+      this.roomBoxs});
 
   DefaultHouse.fromJson(Map<String, dynamic> json) {
     name = json['name'];
