@@ -28,4 +28,13 @@ class UrlProvider {
   static String getHouseDetail(String id) {
     return '$base/farm/$id';
   }
+
+  /// url rooms
+  static String get createNewRoom {
+    return '$base/crop';
+  }
+
+  static String getRoomDetail(String id) {
+    return '$base/crop/$id';
+  }
 }

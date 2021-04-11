@@ -182,3 +182,49 @@ class GetDefaultHouseAction {
   DefaultHouse get defaultHouse => this._defaultHouse;
   GetDefaultHouseAction(this._defaultHouse);
 }
+
+////////////////////////////////////////////
+/// Rooms
+////////////////////////////////////////////
+
+ThunkAction<AppState> createNewRoom(context, String roomName) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var houseID = sharedPreferences.getString("houseID");
+
+    var jsonResponse;
+
+    Map data = {
+      'name': roomName,
+      'farmId': houseID,
+      'image': 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+    };
+
+    var response = await http.post(UrlProvider.createNewRoom,
+        headers: {
+          // 'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: data);
+
+    if (response.statusCode == 201) {
+      jsonResponse = json.decode(response.body);
+      final newRoom = Rooms(
+          id: jsonResponse["id"], name: jsonResponse["name"], devices: []);
+
+      final newRoomBoxs = ApplianceBox(
+        title: jsonResponse["name"],
+        boxInfo: "0 Thiết bị",
+      );
+
+      store.state.defaultHouse.rooms.add(newRoom);
+      store.state.defaultHouse.roomBoxs.add(newRoomBoxs);
+      store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
+      Navigator.pop(context);
+    } else {
+      print(response.body);
+    }
+  };
+}

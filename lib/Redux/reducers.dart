@@ -24,7 +24,6 @@ housesReducer(houses, action) {
 
 defaultHousesReducer(defaultHouse, action) {
   if (action is GetDefaultHouseAction) {
-    // print(action.defaultHouse);
     return action.defaultHouse;
   }
   return defaultHouse;

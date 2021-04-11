@@ -1,10 +1,11 @@
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
 
 class DefaultHouse {
-  String name;
   String id;
+  String name;
   String image;
   String location;
   List<Members> members;
@@ -12,13 +13,31 @@ class DefaultHouse {
   List<ApplianceBox> roomBoxs;
 
   DefaultHouse(
-      {this.name,
-      this.id,
+      {this.id,
+      this.name,
       this.image,
       this.location,
       this.members,
       this.rooms,
       this.roomBoxs});
+
+  DefaultHouse copyWith(
+          {String id,
+          String name,
+          String image,
+          String location,
+          List<Members> members,
+          List<Rooms> rooms,
+          List<ApplianceBox> roomBoxs}) =>
+      DefaultHouse(
+        id: id ?? this.id,
+        name: name ?? this.name,
+        image: image ?? this.image,
+        location: location ?? this.location,
+        members: members ?? this.members,
+        rooms: rooms ?? this.rooms,
+        roomBoxs: roomBoxs ?? this.roomBoxs,
+      );
 
   DefaultHouse.fromJson(Map<String, dynamic> json) {
     name = json['name'];

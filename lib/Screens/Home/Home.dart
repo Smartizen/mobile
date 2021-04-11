@@ -33,24 +33,25 @@ class _HomeState extends State<Home> {
   }
 
   Future<String> createRoom(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
     TextEditingController roomName = TextEditingController();
 
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text("Input Room Name"),
+            title: Text("Nhập tên phòng"),
             backgroundColor: Colors.blueGrey[50],
             content: TextField(
               controller: roomName,
-              decoration: InputDecoration(hintText: "Room"),
+              decoration: InputDecoration(hintText: "ví dụ : phòng khách"),
             ),
             actions: <Widget>[
               MaterialButton(
                 elevation: 5.0,
-                child: Text("Submit"),
+                child: Text("Gửi"),
                 onPressed: () {
-                  Navigator.of(context).pop(roomName.text.toString());
+                  store.dispatch(createNewRoom(context, roomName.text));
                 },
               )
             ],

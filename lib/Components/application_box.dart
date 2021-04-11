@@ -7,8 +7,8 @@ class ApplianceBox extends StatefulWidget {
   String title;
   SvgPicture image;
   String boxInfo;
-  double height;
-  double width;
+  // double height;
+  // double width;
   ApplianceBox({this.title, this.image, this.boxInfo});
   @override
   _ApplianceBoxState createState() => _ApplianceBoxState();
