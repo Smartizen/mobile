@@ -37,4 +37,13 @@ class UrlProvider {
   static String getRoomDetail(String id) {
     return '$base/crop/$id';
   }
+
+  /// Device
+  static String get addDevice {
+    return '$base/device-belong';
+  }
+
+  static String getAllDevice(String id) {
+    return '$base/device-belong/$id';
+  }
 }

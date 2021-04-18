@@ -1,27 +1,84 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/RoomDetails.dart';
+import 'package:smartizen/Redux/action.dart';
+import 'package:smartizen/Redux/app_state.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
+import 'package:barcode_scan/barcode_scan.dart';
 import 'dart:convert';
 
 //ignore: must_be_immutable
 class Room extends StatefulWidget {
   String title;
-  Room({this.title});
+  String roomId;
+  Room({this.title, this.roomId});
   @override
   _RoomState createState() => _RoomState();
 }
 
 class _RoomState extends State<Room> {
   stt.SpeechToText _speech;
+  String qrCodeResult = "";
   bool _isListening = false;
   String _text = 'Press the button and start speaking';
 
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+  }
+
+  _showModalBottomSheet(context) {
+    final store = StoreProvider.of<AppState>(context);
+
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          // TextEditingController deviceId = TextEditingController();
+
+          return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  MaterialButton(
+                    elevation: 5.0,
+                    child: Text("Quét QR code"),
+                    onPressed: () async {
+                      var codeSanner =
+                          await BarcodeScanner.scan(); //barcode scnner
+                      setState(() {
+                        qrCodeResult = codeSanner.rawContent;
+                      });
+                    },
+                  ),
+                  new Text(
+                    qrCodeResult.length > 0 ? "Thiết bị :" + qrCodeResult : "",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  OutlineButton(
+                    child: Text(
+                      "Kết nối",
+                      style: TextStyle(fontSize: 15.0),
+                    ),
+                    highlightedBorderColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      // store.dispatch(addDevice(
+                      //     context, qrCodeResult, widget.roomId));
+                    },
+                  )
+                ],
+              ),
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20))));
+        });
   }
 
   @override
@@ -68,7 +125,27 @@ class _RoomState extends State<Room> {
                   ],
                 )),
           ),
-          SizedBox(height: 50),
+          // SizedBox(height: 50),
+          Padding(
+            padding: EdgeInsets.only(left: 25, top: 15, right: 25),
+            child: RaisedGradientButton(
+                child: Text(
+                  'Thêm thiết bị',
+                  style: TextStyle(
+                      fontFamily: "SF Rounded",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      color: Colors.black),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment(0.01, 0.13),
+                  end: Alignment(0.97, 0.84),
+                  colors: <Color>[Color(0xff79fd7b), Color(0xff3dcd98)],
+                ),
+                onPressed: () {
+                  _showModalBottomSheet(context);
+                }),
+          ),
           Expanded(child: RoomDetails()),
         ],
       ),

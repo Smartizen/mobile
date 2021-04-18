@@ -167,6 +167,7 @@ ThunkAction<AppState> getDefaultHousesData() {
                 .map((room) => ApplianceBox(
                       title: room["name"],
                       boxInfo: room["devices"].length.toString() + " Thiết bị",
+                      roomId: room["id"],
                     ))
                 .toList());
         store.dispatch(GetDefaultHouseAction(_defaultHouse));
@@ -217,12 +218,39 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
       final newRoomBoxs = ApplianceBox(
         title: jsonResponse["name"],
         boxInfo: "0 Thiết bị",
+        roomId: jsonResponse["id"],
       );
 
       store.state.defaultHouse.rooms.add(newRoom);
       store.state.defaultHouse.roomBoxs.add(newRoomBoxs);
       store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
       Navigator.pop(context);
+    } else {
+      print(response.body);
+    }
+  };
+}
+
+ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
+  Map data = {
+    'deviceId': deviceId,
+    'cropId': roomId,
+  };
+
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response = await http.post(UrlProvider.addDevice,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: data);
+    if (response.statusCode == 201) {
+      jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      // TODO add to Farm array
     } else {
       print(response.body);
     }

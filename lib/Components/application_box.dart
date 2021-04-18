@@ -7,9 +7,8 @@ class ApplianceBox extends StatefulWidget {
   String title;
   SvgPicture image;
   String boxInfo;
-  // double height;
-  // double width;
-  ApplianceBox({this.title, this.image, this.boxInfo});
+  String roomId;
+  ApplianceBox({this.title, this.image, this.boxInfo, this.roomId});
   @override
   _ApplianceBoxState createState() => _ApplianceBoxState();
 }
@@ -26,7 +25,8 @@ class _ApplianceBoxState extends State<ApplianceBox> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Room(title: widget.title),
+              builder: (context) =>
+                  Room(title: widget.title, roomId: widget.roomId),
             ),
           );
         },
