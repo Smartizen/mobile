@@ -15,6 +15,7 @@ import 'dart:convert';
 import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
+import 'package:smartizen/Screens/Houses/Houses.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 
 ////////////////////////////////////////////
@@ -45,6 +46,36 @@ ThunkAction<AppState> signin(context, String email, String password) {
   };
 }
 
+ThunkAction<AppState> signup(context, String email, String password,
+    String firstname, String lastname, gender) {
+  Map data = {
+    'email': email,
+    'password': password,
+    'firstname': firstname,
+    'lastname': lastname,
+    'gender': gender.index == 0 ? "male" : "female",
+  };
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    var jsonResponse;
+
+    var response = await http.post(UrlProvider.signup, body: data);
+    if (response.statusCode == 201) {
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse != null) {
+        sharedPreferences.setString("token", jsonResponse['token']);
+        store.dispatch(GetUserAction(jsonResponse["user"]));
+        Navigator.of(context).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (BuildContext context) => Home()),
+            ModalRoute.withName('/Home'));
+      }
+    } else {
+      print(response.body);
+    }
+  };
+}
+
 ThunkAction<AppState> auth(context) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -60,6 +91,8 @@ ThunkAction<AppState> auth(context) {
       if (jsonResponse != null) {
         store.dispatch(GetUserAction(jsonResponse["user"]));
       }
+
+      store.dispatch(getDefaultHousesData(context));
     } else if (response.statusCode == 401) {
       sharedPreferences.clear();
       Navigator.of(context).pushAndRemoveUntil(
@@ -82,11 +115,11 @@ class GetUserAction {
 ////////////////////////////////////////////
 
 ThunkAction<AppState> createHouse(
-    context, String houseName, num lat, num long) {
+    context, String houseName, double lat, double long) {
   Map data = {
     'name': houseName,
-    'lat': lat,
-    'long': long,
+    'lat': lat.toString(),
+    'long': long.toString(),
     'image': 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
   };
 
@@ -100,9 +133,14 @@ ThunkAction<AppState> createHouse(
           'Authorization': 'Bearer $token',
         },
         body: data);
+    print(response.statusCode);
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       print(jsonResponse);
+      sharedPreferences.setString("houseID", jsonResponse["id"]);
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => Houses()),
+      );
       // TODO add to Farm array
     } else {
       print(response.body);

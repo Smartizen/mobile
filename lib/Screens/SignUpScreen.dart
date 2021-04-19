@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:smartizen/Redux/action.dart';
+import 'package:smartizen/Redux/app_state.dart';
 
-import 'package:smartizen/Screens/Home/Home.dart';
+enum Gender { MALE, FEMALE }
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -13,10 +12,12 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoading = false;
+  Gender _genderValue = Gender.MALE;
 
   final TextEditingController emailController = new TextEditingController();
   final TextEditingController passwordController = new TextEditingController();
-  final TextEditingController nameController = new TextEditingController();
+  final TextEditingController firstNameController = new TextEditingController();
+  final TextEditingController lastNameController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,37 +72,78 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         IconButton(icon: Icon(Icons.person), onPressed: null),
                         Expanded(
                             child: Container(
-                                margin: EdgeInsets.only(right: 20, left: 10),
+                                margin: EdgeInsets.only(right: 10, left: 10),
                                 child: TextFormField(
-                                  controller: nameController,
+                                  controller: firstNameController,
                                   decoration:
-                                      InputDecoration(hintText: 'Your Name'),
+                                      InputDecoration(hintText: 'First Name'),
+                                ))),
+                        Expanded(
+                            child: Container(
+                                margin: EdgeInsets.only(
+                                  right: 20,
+                                ),
+                                child: TextFormField(
+                                  controller: lastNameController,
+                                  decoration:
+                                      InputDecoration(hintText: 'Last Name'),
                                 )))
                       ],
                     ),
                   ),
-                  SizedBox(
-                    height: 40,
-                  ),
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: Row(
                       children: <Widget>[
-                        Radio(value: null, groupValue: null, onChanged: null),
-                        RichText(
-                            text: TextSpan(
-                                text: 'I have accepted the',
-                                style: TextStyle(color: Colors.black),
-                                children: [
-                              TextSpan(
-                                  text: 'Terms & Condition',
-                                  style: TextStyle(
-                                      color: Colors.teal,
-                                      fontWeight: FontWeight.bold))
-                            ]))
+                        Expanded(
+                          child: RadioListTile(
+                            title: const Text('Male'),
+                            value: Gender.MALE,
+                            groupValue: _genderValue,
+                            onChanged: (Gender value) {
+                              setState(() {
+                                _genderValue = value;
+                              });
+                            },
+                          ),
+                        ),
+                        Expanded(
+                          child: RadioListTile(
+                            title: const Text('Female'),
+                            value: Gender.FEMALE,
+                            groupValue: _genderValue,
+                            onChanged: (Gender value) {
+                              setState(() {
+                                _genderValue = value;
+                              });
+                            },
+                          ),
+                        ),
                       ],
                     ),
                   ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Row(
+                  //     children: <Widget>[
+                  //       Radio(value: null, groupValue: null, onChanged: null),
+                  //       RichText(
+                  //           text: TextSpan(
+                  //               text: 'I have accepted the',
+                  //               style: TextStyle(color: Colors.black),
+                  //               children: [
+                  //             TextSpan(
+                  //                 text: 'Terms & Condition',
+                  //                 style: TextStyle(
+                  //                     color: Colors.teal,
+                  //                     fontWeight: FontWeight.bold))
+                  //           ]))
+                  //     ],
+                  //   ),
+                  // ),
                   SizedBox(
                     height: 10,
                   ),
@@ -112,18 +154,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       child: Container(
                         height: 60,
                         child: RaisedButton(
-                          onPressed:
-                              // emailController.text == "" ||
-                              //         passwordController.text == "" ||
-                              //         nameController.text == ""
-                              //     ? null
-                              //     :
-                              () {
+                          onPressed: () {
                             setState(() {
                               _isLoading = true;
                             });
-                            signUp(emailController.text,
-                                passwordController.text, nameController.text);
+                            signUp(
+                                emailController.text,
+                                passwordController.text,
+                                firstNameController.text,
+                                lastNameController.text,
+                                _genderValue);
                           },
                           color: Color(0xFF00a79B),
                           child: Text(
@@ -143,33 +183,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  signUp(String email, pass, name) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    Map data = {'email': email, 'password': pass, 'name': name, 'role': "1"};
-    print(data);
-    var jsonResponse;
+  signUp(String email, password, firstname, lastname, gender) async {
+    final store = StoreProvider.of<AppState>(context);
 
-    var response =
-        await http.post(DotEnv().env['API_URL'] + "/users", body: data);
-    if (response.statusCode == 201) {
-      jsonResponse = json.decode(response.body);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      if (jsonResponse != null) {
-        setState(() {
-          _isLoading = false;
-        });
-        sharedPreferences.setString("token", jsonResponse['token']);
-        Navigator.of(context).pushAndRemoveUntil(
-            MaterialPageRoute(builder: (BuildContext context) => Home()),
-            ModalRoute.withName('/Home'));
-      }
-    } else {
-      setState(() {
-        _isLoading = false;
-      });
-      print(response.body);
-    }
+    await store.dispatch(
+        signup(context, email, password, firstname, lastname, gender));
+
+    setState(() {
+      _isLoading = false;
+    });
   }
 }
 
