@@ -136,8 +136,10 @@ ThunkAction<AppState> createHouse(
     print(response.statusCode);
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse["data"];
       print(jsonResponse);
       sharedPreferences.setString("houseID", jsonResponse["id"]);
+
       Navigator.of(context).push(
         MaterialPageRoute(builder: (BuildContext context) => Houses()),
       );

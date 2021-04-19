@@ -1,4 +1,3 @@
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
@@ -7,8 +6,8 @@ class DefaultHouse {
   String id;
   String name;
   String image;
-  num lat;
-  num long;
+  String lat;
+  String long;
   List<Members> members;
   List<Rooms> rooms;
   List<ApplianceBox> roomBoxs;
@@ -27,8 +26,8 @@ class DefaultHouse {
           {String id,
           String name,
           String image,
-          num lat,
-          num long,
+          String lat,
+          String long,
           List<Members> members,
           List<Rooms> rooms,
           List<ApplianceBox> roomBoxs}) =>

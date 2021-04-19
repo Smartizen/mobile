@@ -23,7 +23,7 @@ class HouseListItem extends StatelessWidget {
                 TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
-            housesModel.location,
+            "",
             style: TextStyle(color: Colors.grey[700]),
           ),
           trailing: Icon(

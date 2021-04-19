@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:redux/redux.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
@@ -19,8 +18,8 @@ class _AddHouseState extends State<AddHouse> {
   LatLng viewPosition = LatLng(21.0309619, 106.773997);
   String searchAddr;
   String address = '';
-  num lat;
-  num long;
+  double lat;
+  double long;
   Set<Marker> _markers = {};
 
   void initState() {
@@ -190,6 +189,9 @@ class _AddHouseState extends State<AddHouse> {
           position: LatLng(locations[0].latitude, locations[0].longitude),
           infoWindow: InfoWindow(title: "Your House", snippet: "Your house")));
 
+      lat = locations[0].latitude;
+      long = locations[0].longitude;
+
       mapController.animateCamera(CameraUpdate.newCameraPosition(CameraPosition(
           target: LatLng(locations[0].latitude, locations[0].longitude),
           zoom: 20.0)));
@@ -216,6 +218,8 @@ class _AddHouseState extends State<AddHouse> {
     setState(() {
       _markers.add(marker);
       address = newPlace[0].street.toString();
+      lat = position.latitude;
+      long = position.longitude;
     });
   }
 
@@ -232,6 +236,9 @@ class _AddHouseState extends State<AddHouse> {
                     InfoWindow(title: "Your House", snippet: "Your house")));
 
             address = newPlace[0].street.toString();
+
+            lat = value.latitude;
+            long = value.longitude;
 
             mapController.animateCamera(CameraUpdate.newCameraPosition(
                 CameraPosition(
