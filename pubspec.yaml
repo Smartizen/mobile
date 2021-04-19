@@ -26,6 +26,9 @@ dependencies:
   redux_thunk: ^0.3.0
   redux_logging: ^0.4.0
   flutter_redux: ^0.6.0
+  google_maps_flutter: ^1.0.5
+  geolocator: '^6.2.1'
+  geocoding: ^1.0.5
 
 dev_dependencies:
   flutter_config: ^1.0.5

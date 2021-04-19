@@ -7,7 +7,8 @@ class DefaultHouse {
   String id;
   String name;
   String image;
-  String location;
+  num lat;
+  num long;
   List<Members> members;
   List<Rooms> rooms;
   List<ApplianceBox> roomBoxs;
@@ -16,7 +17,8 @@ class DefaultHouse {
       {this.id,
       this.name,
       this.image,
-      this.location,
+      this.lat,
+      this.long,
       this.members,
       this.rooms,
       this.roomBoxs});
@@ -25,7 +27,8 @@ class DefaultHouse {
           {String id,
           String name,
           String image,
-          String location,
+          num lat,
+          num long,
           List<Members> members,
           List<Rooms> rooms,
           List<ApplianceBox> roomBoxs}) =>
@@ -33,7 +36,8 @@ class DefaultHouse {
         id: id ?? this.id,
         name: name ?? this.name,
         image: image ?? this.image,
-        location: location ?? this.location,
+        lat: lat ?? this.lat,
+        long: long ?? this.long,
         members: members ?? this.members,
         rooms: rooms ?? this.rooms,
         roomBoxs: roomBoxs ?? this.roomBoxs,
@@ -43,7 +47,8 @@ class DefaultHouse {
     name = json['name'];
     id = json['id'];
     image = json['image'];
-    location = json['location'];
+    lat = json['lat'];
+    long = json['long'];
     if (json['members'] != null) {
       members = new List<Members>();
       json['members'].forEach((v) {
@@ -63,7 +68,8 @@ class DefaultHouse {
     data['name'] = this.name;
     data['id'] = this.id;
     data['image'] = this.image;
-    data['location'] = this.location;
+    data['lat'] = this.lat;
+    data['long'] = this.long;
     if (this.members != null) {
       data['members'] = this.members.map((v) => v.toJson()).toList();
     }
@@ -75,6 +81,6 @@ class DefaultHouse {
 
   @override
   String toString() {
-    return 'Default: {id: $id, name: $name,image: $image,location: $location, members: $members,rooms : $rooms}';
+    return 'Default: {id: $id, name: $name,image: $image,lat: $lat,long: $long, members: $members,rooms : $rooms}';
   }
 }

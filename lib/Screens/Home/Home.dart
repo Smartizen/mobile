@@ -6,6 +6,7 @@ import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/Home/Component/room.dart';
@@ -66,8 +67,8 @@ class _HomeState extends State<Home> {
         body: Container(
             child: StoreConnector<AppState, AppState>(
                 onInit: (store) {
-                  store.dispatch(auth());
-                  store.dispatch(getDefaultHousesData());
+                  store.dispatch(auth(context));
+                  store.dispatch(getDefaultHousesData(context));
                 },
                 converter: (store) => store.state,
                 builder: (context, state) {
@@ -203,7 +204,9 @@ class _HomeState extends State<Home> {
                                       color: Colors.white.withOpacity(0.25),
                                     ),
                                     Text(
-                                      " " + state.defaultHouse.name,
+                                      state.defaultHouse == null
+                                          ? ""
+                                          : " " + state.defaultHouse.name,
                                       style: TextStyle(
                                           fontFamily: "SF Rounded",
                                           fontSize: 16,
@@ -217,7 +220,7 @@ class _HomeState extends State<Home> {
                           ),
                         ]),
                       ),
-                      Expanded(child: Room())
+                      // Expanded(child: Room())
                     ],
                   );
                 })),

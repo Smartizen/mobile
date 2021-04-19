@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:redux/redux.dart';
+import 'package:smartizen/Redux/action.dart';
+import 'package:smartizen/Redux/app_state.dart';
 
 class AddHouse extends StatefulWidget {
   @override
@@ -12,11 +16,10 @@ class _AddHouseState extends State<AddHouse> {
   GoogleMapController mapController;
 
   LatLng viewPosition = LatLng(21.0309619, 106.773997);
-
   String searchAddr;
-
   String address = '';
-
+  num lat;
+  num long;
   Set<Marker> _markers = {};
 
   void _onMapCreated(GoogleMapController controller) {
@@ -34,112 +37,124 @@ class _AddHouseState extends State<AddHouse> {
         appBar: AppBar(
           title: Text("Add House"),
         ),
-        body: Stack(
-          children: <Widget>[
-            GoogleMap(
-                onMapCreated: _onMapCreated,
-                markers: _markers,
-                zoomControlsEnabled: false,
-                myLocationEnabled: true,
-                onCameraIdle: () => getCurrentPosition(),
-                initialCameraPosition:
-                    CameraPosition(target: viewPosition, zoom: 20)),
-            DraggableScrollableSheet(
-              maxChildSize: 0.85,
-              minChildSize: 0.1,
-              builder:
-                  (BuildContext context, ScrollController scrolController) {
-                return Stack(
-                  overflow: Overflow.visible,
-                  children: <Widget>[
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.blueGrey[50],
-                        borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(40),
-                            topLeft: Radius.circular(40)),
-                      ),
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding:
-                                EdgeInsets.only(left: 25, top: 50, right: 25),
-                            child: Container(
-                              height: 50.0,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10.0),
-                                  color: Colors.white),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    hintText: 'Enter Address',
-                                    border: InputBorder.none,
-                                    contentPadding:
-                                        EdgeInsets.only(left: 15.0, top: 15.0),
-                                    suffixIcon: IconButton(
-                                        icon: Icon(Icons.search),
-                                        onPressed: searchandNavigate,
-                                        iconSize: 30.0)),
-                                onChanged: (val) {
-                                  setState(() {
-                                    searchAddr = val;
-                                  });
-                                },
-                              ),
-                            ),
-                          ),
+        body: StoreConnector<AppState, AppState>(
+            converter: (store) => store.state,
+            builder: (context, state) {
+              return Stack(
+                children: <Widget>[
+                  GoogleMap(
+                      onMapCreated: _onMapCreated,
+                      markers: _markers,
+                      zoomControlsEnabled: false,
+                      myLocationEnabled: true,
+                      onCameraIdle: () => getCurrentPosition(),
+                      initialCameraPosition:
+                          CameraPosition(target: viewPosition, zoom: 20)),
+                  DraggableScrollableSheet(
+                    maxChildSize: 0.85,
+                    minChildSize: 0.1,
+                    builder: (BuildContext context,
+                        ScrollController scrolController) {
+                      return Stack(
+                        overflow: Overflow.visible,
+                        children: <Widget>[
                           Container(
-                            width: double.infinity,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.only(left: 25, top: 25, right: 25),
-                              child: Row(
-                                children: [
-                                  Icon(Icons.house_outlined),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text(
-                                      address.length > 0 ? address : "",
-                                      style: TextStyle(
-                                          fontFamily: "SF Rounded",
-                                          fontSize: 16,
-                                          color: Colors.black),
+                            decoration: BoxDecoration(
+                              color: Colors.blueGrey[50],
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(40),
+                                  topLeft: Radius.circular(40)),
+                            ),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 25, top: 50, right: 25),
+                                  child: Container(
+                                    height: 50.0,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                        color: Colors.white),
+                                    child: TextField(
+                                      decoration: InputDecoration(
+                                          hintText: 'Enter Address',
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(
+                                              left: 15.0, top: 15.0),
+                                          suffixIcon: IconButton(
+                                              icon: Icon(Icons.search),
+                                              onPressed: searchandNavigate,
+                                              iconSize: 30.0)),
+                                      onChanged: (val) {
+                                        setState(() {
+                                          searchAddr = val;
+                                        });
+                                      },
                                     ),
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: double.infinity,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.only(left: 25, top: 25, right: 25),
-                              child: ButtonTheme(
-                                height: 50,
-                                child: RaisedButton(
-                                  onPressed: () {},
-                                  color: Color(0xFF00a79B),
-                                  child: Text(
-                                    'Xác Nhận',
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                                ),
+                                Container(
+                                  width: double.infinity,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 25, top: 25, right: 25),
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.house_outlined),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Text(
+                                            address.length > 0 ? address : "",
+                                            style: TextStyle(
+                                                fontFamily: "SF Rounded",
+                                                fontSize: 16,
+                                                color: Colors.black),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                                Container(
+                                  width: double.infinity,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 25, top: 25, right: 25),
+                                    child: ButtonTheme(
+                                      height: 50,
+                                      child: RaisedButton(
+                                        onPressed: () {
+                                          addNewHouse(context);
+                                        },
+                                        color: Color(0xFF00a79B),
+                                        child: Text(
+                                          'Xác Nhận',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
                             ),
                           )
                         ],
-                      ),
-                    )
-                  ],
-                );
-              },
-            )
-          ],
-        ));
+                      );
+                    },
+                  )
+                ],
+              );
+            }));
+  }
+
+  addNewHouse(BuildContext context) async {
+    final store = StoreProvider.of<AppState>(context);
+    store.dispatch(createHouse(context, address, lat, long));
   }
 
   searchandNavigate() async {

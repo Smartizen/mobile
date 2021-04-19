@@ -13,7 +13,9 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:smartizen/Repository/url_provider.dart';
+import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
+import 'package:smartizen/Screens/SignInScreen.dart';
 
 ////////////////////////////////////////////
 /// User
@@ -43,12 +45,11 @@ ThunkAction<AppState> signin(context, String email, String password) {
   };
 }
 
-ThunkAction<AppState> auth() {
+ThunkAction<AppState> auth(context) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
     var jsonResponse;
-
     var response = await http.get(UrlProvider.auth, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -59,6 +60,11 @@ ThunkAction<AppState> auth() {
       if (jsonResponse != null) {
         store.dispatch(GetUserAction(jsonResponse["user"]));
       }
+    } else if (response.statusCode == 401) {
+      sharedPreferences.clear();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
+          ModalRoute.withName('/SignIn'));
     } else {
       print(response.body);
     }
@@ -75,10 +81,12 @@ class GetUserAction {
 /// House
 ////////////////////////////////////////////
 
-ThunkAction<AppState> createHouse(context, String houseName, String location) {
+ThunkAction<AppState> createHouse(
+    context, String houseName, num lat, num long) {
   Map data = {
     'name': houseName,
-    'location': location,
+    'lat': lat,
+    'long': long,
     'image': 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
   };
 
@@ -137,43 +145,61 @@ class GetHousesAction {
   GetHousesAction(this._houses);
 }
 
-ThunkAction<AppState> getDefaultHousesData() {
+ThunkAction<AppState> getDefaultHousesData(context) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
-    var houseID = sharedPreferences.getString("houseID");
-    var jsonResponse;
+    var isHaveHouse = sharedPreferences.containsKey('houseID');
+    if (isHaveHouse) {
+      var houseID = sharedPreferences.getString("houseID");
+      var jsonResponse;
 
-    var response =
-        await http.get(UrlProvider.getHouseDetail(houseID), headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Bearer $token',
-    });
+      var response =
+          await http.get(UrlProvider.getHouseDetail(houseID), headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
 
-    if (response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
-      if (jsonResponse != null) {
-        final members = jsonResponse["members"] as List;
-        final rooms = jsonResponse["rooms"] as List;
-        final _defaultHouse = DefaultHouse(
-            id: jsonResponse["id"],
-            name: jsonResponse["name"],
-            image: jsonResponse["image"],
-            location: jsonResponse["location"],
-            members: members.map((member) => Members.fromJson(member)).toList(),
-            rooms: rooms.map((room) => Rooms.fromJson(room)).toList(),
-            roomBoxs: rooms
-                .map((room) => ApplianceBox(
-                      title: room["name"],
-                      boxInfo: room["devices"].length.toString() + " Thiết bị",
-                      roomId: room["id"],
-                    ))
-                .toList());
-        store.dispatch(GetDefaultHouseAction(_defaultHouse));
+      if (response.statusCode == 200) {
+        jsonResponse = json.decode(response.body);
+        jsonResponse = jsonResponse["farm"];
+
+        if (jsonResponse != null) {
+          final members = jsonResponse["members"] as List;
+          final rooms = jsonResponse["rooms"] as List;
+          final _defaultHouse = DefaultHouse(
+              id: jsonResponse["id"],
+              name: jsonResponse["name"],
+              image: jsonResponse["image"],
+              lat: jsonResponse["lat"],
+              long: jsonResponse["long"],
+              members:
+                  members.map((member) => Members.fromJson(member)).toList(),
+              rooms: rooms.map((room) => Rooms.fromJson(room)).toList(),
+              roomBoxs: rooms
+                  .map((room) => ApplianceBox(
+                        title: room["name"],
+                        boxInfo:
+                            room["devices"].length.toString() + " Thiết bị",
+                        roomId: room["id"],
+                      ))
+                  .toList());
+          store.dispatch(GetDefaultHouseAction(_defaultHouse));
+        } else {
+          sharedPreferences.remove("houseID");
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) => AddHouse()),
+          );
+        }
+      } else {
+        print(response.body);
       }
     } else {
-      print(response.body);
+      sharedPreferences.remove("houseID");
+      Navigator.of(context).push(
+        MaterialPageRoute(builder: (BuildContext context) => AddHouse()),
+      );
     }
   };
 }
