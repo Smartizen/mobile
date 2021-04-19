@@ -6,7 +6,6 @@ import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
-import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/Home/Component/room.dart';
@@ -220,7 +219,7 @@ class _HomeState extends State<Home> {
                           ),
                         ]),
                       ),
-                      // Expanded(child: Room())
+                      Expanded(child: Room())
                     ],
                   );
                 })),

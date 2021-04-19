@@ -4,6 +4,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:redux/redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 
@@ -22,6 +23,11 @@ class _AddHouseState extends State<AddHouse> {
   num long;
   Set<Marker> _markers = {};
 
+  void initState() {
+    super.initState();
+    welcomeDialog();
+  }
+
   void _onMapCreated(GoogleMapController controller) {
     setState(() {
       setState(() {
@@ -31,10 +37,29 @@ class _AddHouseState extends State<AddHouse> {
     getFirstPosition();
   }
 
+  welcomeDialog() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var isHaveHouse = sharedPreferences.containsKey('houseID');
+    if (!isHaveHouse)
+      return showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text("Chào mừng đã đến với nền tảng Smartizen"),
+              content: Text("Hãy chọn vị trí căn nhà của bạn"),
+              backgroundColor: Colors.white,
+              elevation: 24.0,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(32.0))),
+            );
+          });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: const Color(0xff202227),
           title: Text("Add House"),
         ),
         body: StoreConnector<AppState, AppState>(
