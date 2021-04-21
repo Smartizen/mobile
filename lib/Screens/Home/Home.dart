@@ -67,7 +67,6 @@ class _HomeState extends State<Home> {
             child: StoreConnector<AppState, AppState>(
                 onInit: (store) {
                   store.dispatch(auth(context));
-                  store.dispatch(getDefaultHousesData(context));
                 },
                 converter: (store) => store.state,
                 builder: (context, state) {
