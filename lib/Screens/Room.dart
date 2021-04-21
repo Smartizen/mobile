@@ -35,47 +35,48 @@ class _RoomState extends State<Room> {
     final store = StoreProvider.of<AppState>(context);
 
     showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        backgroundColor: Colors.white,
         context: context,
         builder: (BuildContext context) {
           return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  MaterialButton(
-                    elevation: 5.0,
-                    child: Text("Quét QR code"),
-                    onPressed: () async {
-                      var codeSanner =
-                          await BarcodeScanner.scan(); //barcode scnner
-                      setState(() {
-                        qrCodeResult = codeSanner.rawContent;
-                      });
-                    },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                MaterialButton(
+                  elevation: 5.0,
+                  child: Text("Quét QR code"),
+                  onPressed: () async {
+                    var codeSanner =
+                        await BarcodeScanner.scan(); //barcode scnner
+                    setState(() {
+                      qrCodeResult = codeSanner.rawContent;
+                    });
+                  },
+                ),
+                new Text(
+                  qrCodeResult.length > 0 ? "Thiết bị :" + qrCodeResult : "",
+                  style: TextStyle(fontSize: 20.0),
+                ),
+                OutlineButton(
+                  child: Text(
+                    "Kết nối",
+                    style: TextStyle(fontSize: 15.0),
                   ),
-                  new Text(
-                    qrCodeResult.length > 0 ? "Thiết bị :" + qrCodeResult : "",
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                  OutlineButton(
-                    child: Text(
-                      "Kết nối",
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                    highlightedBorderColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
-                      // store.dispatch(addDevice(
-                      //     context, qrCodeResult, widget.roomId));
-                    },
-                  )
-                ],
-              ),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20))));
+                  highlightedBorderColor: Colors.red,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)),
+                  onPressed: () {
+                    // store.dispatch(addDevice(
+                    //     context, qrCodeResult, widget.roomId));
+                  },
+                )
+              ],
+            ),
+          );
         });
   }
 
