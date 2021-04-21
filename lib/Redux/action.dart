@@ -91,8 +91,6 @@ ThunkAction<AppState> auth(context) {
       if (jsonResponse != null) {
         store.dispatch(GetUserAction(jsonResponse["user"]));
       }
-
-      store.dispatch(getDefaultHousesData(context));
     } else if (response.statusCode == 401) {
       sharedPreferences.clear();
       Navigator.of(context).pushAndRemoveUntil(

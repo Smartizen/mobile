@@ -37,8 +37,6 @@ class _RoomState extends State<Room> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          // TextEditingController deviceId = TextEditingController();
-
           return Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -98,34 +96,13 @@ class _RoomState extends State<Room> {
           child: Icon(_isListening ? Icons.mic : Icons.mic_none),
         ),
       ),
+      appBar: AppBar(
+        backgroundColor: const Color(0xff202227),
+        title: Text(widget.title),
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 25, top: 30),
-            child: Positioned(
-                top: 20,
-                child: Row(
-                  children: <Widget>[
-                    IconButton(
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        }),
-                    Text(
-                      widget.title,
-                      style: TextStyle(
-                          fontFamily: "SF Rounded",
-                          fontSize: 24,
-                          color: Colors.white),
-                    )
-                  ],
-                )),
-          ),
-          // SizedBox(height: 50),
           Padding(
             padding: EdgeInsets.only(left: 25, top: 15, right: 25),
             child: RaisedGradientButton(
