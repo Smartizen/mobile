@@ -22,7 +22,6 @@ class Room extends StatefulWidget {
 
 class _RoomState extends State<Room> {
   stt.SpeechToText _speech;
-  String qrCodeResult = "";
   bool _isListening = false;
   String _text = 'Press the button and start speaking';
 
@@ -42,41 +41,51 @@ class _RoomState extends State<Room> {
         backgroundColor: Colors.white,
         context: context,
         builder: (BuildContext context) {
-          return Container(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                MaterialButton(
-                  elevation: 5.0,
-                  child: Text("Quét QR code"),
-                  onPressed: () async {
-                    var codeSanner =
-                        await BarcodeScanner.scan(); //barcode scnner
-                    setState(() {
-                      qrCodeResult = codeSanner.rawContent;
-                    });
-                  },
-                ),
-                new Text(
-                  qrCodeResult.length > 0 ? "Thiết bị :" + qrCodeResult : "",
-                  style: TextStyle(fontSize: 20.0),
-                ),
-                OutlineButton(
-                  child: Text(
-                    "Kết nối",
-                    style: TextStyle(fontSize: 15.0),
+          String deviceName = "";
+          String deviceId = "";
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter mystate) {
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  MaterialButton(
+                    elevation: 5.0,
+                    child: Text("Quét QR code"),
+                    onPressed: () async {
+                      var codeSanner =
+                          await BarcodeScanner.scan(); //barcode scnner
+                      var jsonResponse = json.decode(codeSanner.rawContent);
+
+                      mystate(() {
+                        deviceName = jsonResponse["deviceName"];
+                        deviceId = jsonResponse["deviceId"];
+                      });
+                    },
                   ),
-                  highlightedBorderColor: Colors.red,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15)),
-                  onPressed: () {
-                    // store.dispatch(addDevice(
-                    //     context, qrCodeResult, widget.roomId));
-                  },
-                )
-              ],
-            ),
-          );
+                  new Text(
+                    deviceName.length > 0
+                        ? "Xác nhận kết nối : " + deviceName
+                        : "",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  OutlineButton(
+                    child: Text(
+                      "Kết nối",
+                      style: TextStyle(fontSize: 15.0),
+                    ),
+                    highlightedBorderColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      store.dispatch(
+                          addDevice(context, deviceId, widget.roomId));
+                    },
+                  )
+                ],
+              ),
+            );
+          });
         });
   }
 

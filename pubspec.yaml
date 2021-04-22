@@ -29,6 +29,7 @@ dependencies:
   google_maps_flutter: ^1.0.5
   geolocator: '^6.2.1'
   geocoding: ^1.0.5
+  modal_bottom_sheet: ^2.0.0
 
 dev_dependencies:
   flutter_config: ^1.0.5
