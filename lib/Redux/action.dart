@@ -147,6 +147,31 @@ ThunkAction<AppState> createHouse(
   };
 }
 
+ThunkAction<AppState> deleteHouseAction(context, String houseID) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response =
+        await http.delete(UrlProvider.getHouseDetail(houseID), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      print(jsonResponse);
+      store.state.houses.removeWhere((houses) => houses.id == houseID);
+      store.dispatch(GetHousesAction(store.state.houses));
+    } else {
+      print(response.body);
+    }
+  };
+}
+
 ThunkAction<AppState> getHousesData() {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();

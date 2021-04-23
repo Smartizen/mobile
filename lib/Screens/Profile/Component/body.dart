@@ -45,7 +45,8 @@ class _ProfileBodyState extends State<ProfileBody> {
           ProfileMenu(
             text: "Log Out",
             icon: Icons.logout,
-            press: () {
+            press: () async {
+              sharedPreferences = await SharedPreferences.getInstance();
               sharedPreferences.clear();
               Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(

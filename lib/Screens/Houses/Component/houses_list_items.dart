@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Screens/Houses/Component/model_fit.dart';
 
@@ -24,7 +23,6 @@ class HouseListItem extends StatelessWidget {
         borderRadius: BorderRadius.only(
             topRight: Radius.circular(20), topLeft: Radius.circular(20)),
       ),
-      margin: const EdgeInsets.only(top: 20.0),
       child: ListTile(
           title: Text(
             housesModel.name,
@@ -41,7 +39,6 @@ class HouseListItem extends StatelessWidget {
                   Icons.check_circle,
                   color: Colors.greenAccent,
                 ),
-          isThreeLine: true,
           onTap: () => showMaterialModalBottomSheet(
                 expand: false,
                 context: context,
