@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Models/houses.dart';
-import 'package:smartizen/Screens/Home/Home.dart';
+import 'package:smartizen/Screens/Houses/Component/model_fit.dart';
 
 class HouseListItem extends StatelessWidget {
   const HouseListItem({
     Key key,
     @required this.itemIndex,
     @required this.housesModel,
+    @required this.defaultHouseId,
   }) : super(key: key);
 
   final int itemIndex;
   final HousesModel housesModel;
+  final String defaultHouseId;
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+      ),
+      margin: const EdgeInsets.only(top: 20.0),
       child: ListTile(
           title: Text(
             housesModel.name,
@@ -26,20 +35,19 @@ class HouseListItem extends StatelessWidget {
             "",
             style: TextStyle(color: Colors.grey[700]),
           ),
-          trailing: Icon(
-            Icons.check_circle,
-            color: Colors.greenAccent,
-          ),
+          trailing: defaultHouseId != housesModel.id
+              ? null
+              : Icon(
+                  Icons.check_circle,
+                  color: Colors.greenAccent,
+                ),
           isThreeLine: true,
-          onTap: () => selectHouseDefault(context, housesModel)),
+          onTap: () => showMaterialModalBottomSheet(
+                expand: false,
+                context: context,
+                backgroundColor: Colors.transparent,
+                builder: (context) => ModalFit(housesModel: this.housesModel),
+              )),
     );
-  }
-
-  selectHouseDefault(context, housesModel) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("houseID", housesModel.toJson()["id"]);
-    Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute(builder: (BuildContext context) => Home()),
-        ModalRoute.withName('/Home'));
   }
 }

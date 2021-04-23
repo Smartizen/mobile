@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
@@ -70,7 +71,9 @@ class _HousesBodyState extends State<HousesBody> {
                                         itemBuilder: (context, index) {
                                           return HouseListItem(
                                               itemIndex: index,
-                                              housesModel: state.houses[index]);
+                                              housesModel: state.houses[index],
+                                              defaultHouseId:
+                                                  state.defaultHouse.id);
                                         },
                                         controller: scrolController,
                                         itemCount: state.houses.length)),
