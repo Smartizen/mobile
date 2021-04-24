@@ -12,7 +12,7 @@ import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Houses/Houses.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
-import 'package:smartizen/Screens/Room.dart';
+import 'package:smartizen/Screens/Rooms/Rooms.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/SignUpScreen.dart';
 
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
             'SignIn': (context) => SignInScreen(),
             'SignUp': (context) => SignUpScreen(),
             'Home': (context) => Home(),
-            'Room': (context) => Room(),
+            'Room': (context) => Rooms(),
             'Profile': (context) => Profile(),
             "AddHouse": (context) => AddHouse(),
             'Houses': (context) => Houses()

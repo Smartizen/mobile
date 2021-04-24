@@ -40,10 +40,10 @@ class UrlProvider {
 
   /// Device
   static String get addDevice {
-    return '$base/device-belong';
+    return '$base/active';
   }
 
   static String getAllDevice(String id) {
-    return '$base/device-belong/$id';
+    return '$base/active/$id';
   }
 }

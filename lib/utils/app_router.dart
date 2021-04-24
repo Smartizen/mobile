@@ -1,7 +1,7 @@
 import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:smartizen/Screens/Home/Home.dart';
-import 'package:smartizen/Screens/Room.dart';
+import 'package:smartizen/Screens/Rooms/Component/Room.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/SignUpScreen.dart';
 // import 'package:smartizen/Store/app/app_state.dart';

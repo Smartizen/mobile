@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smartizen/Screens/Room.dart';
+import 'package:smartizen/Screens/Rooms/Component/Room.dart';
+import 'package:smartizen/Screens/Rooms/Rooms.dart';
+import 'package:smartizen/Screens/Rooms/RoomsScreen.dart';
 
 //ignore: must_be_immutable
 class ApplianceBox extends StatefulWidget {
@@ -25,8 +27,7 @@ class _ApplianceBoxState extends State<ApplianceBox> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) =>
-                  Room(title: widget.title, roomId: widget.roomId),
+              builder: (context) => Rooms(title: widget.title),
             ),
           );
         },
