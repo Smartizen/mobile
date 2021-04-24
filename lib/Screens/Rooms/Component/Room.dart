@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/RoomDetails.dart';
-import 'package:smartizen/Redux/action.dart';
-import 'package:smartizen/Redux/app_state.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'package:barcode_scan/barcode_scan.dart';
 import 'dart:convert';
 
 //ignore: must_be_immutable
@@ -28,65 +23,6 @@ class _RoomState extends State<Room> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-  }
-
-  _showModalBottomSheet(context) {
-    final store = StoreProvider.of<AppState>(context);
-
-    showModalBottomSheet(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-        ),
-        backgroundColor: Colors.white,
-        context: context,
-        builder: (BuildContext context) {
-          String deviceName = "";
-          String deviceId = "";
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter mystate) {
-            return Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  MaterialButton(
-                    elevation: 5.0,
-                    child: Text("Quét QR code"),
-                    onPressed: () async {
-                      var codeSanner =
-                          await BarcodeScanner.scan(); //barcode scnner
-                      var jsonResponse = json.decode(codeSanner.rawContent);
-
-                      mystate(() {
-                        deviceName = jsonResponse["deviceName"];
-                        deviceId = jsonResponse["deviceId"];
-                      });
-                    },
-                  ),
-                  new Text(
-                    deviceName.length > 0
-                        ? "Xác nhận kết nối : " + deviceName
-                        : "",
-                    style: TextStyle(fontSize: 20.0),
-                  ),
-                  OutlineButton(
-                    child: Text(
-                      "Kết nối",
-                      style: TextStyle(fontSize: 15.0),
-                    ),
-                    highlightedBorderColor: Colors.red,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
-                    onPressed: () {
-                      store.dispatch(
-                          addDevice(context, deviceId, widget.roomId));
-                    },
-                  )
-                ],
-              ),
-            );
-          });
-        });
   }
 
   @override
@@ -113,26 +49,6 @@ class _RoomState extends State<Room> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 25, top: 15, right: 25),
-            child: RaisedGradientButton(
-                child: Text(
-                  'Thêm thiết bị',
-                  style: TextStyle(
-                      fontFamily: "SF Rounded",
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      color: Colors.black),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment(0.01, 0.13),
-                  end: Alignment(0.97, 0.84),
-                  colors: <Color>[Color(0xff79fd7b), Color(0xff3dcd98)],
-                ),
-                onPressed: () {
-                  _showModalBottomSheet(context);
-                }),
-          ),
           Expanded(child: RoomDetails()),
         ],
       ),

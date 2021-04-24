@@ -27,7 +27,8 @@ class _ApplianceBoxState extends State<ApplianceBox> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => Rooms(title: widget.title),
+              builder: (context) =>
+                  Rooms(title: widget.title, roomId: widget.roomId),
             ),
           );
         },

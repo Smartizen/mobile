@@ -5,11 +5,8 @@ import 'package:smartizen/Screens/Rooms/drawerScreen.dart';
 //ignore: must_be_immutable
 class Rooms extends StatefulWidget {
   String title;
-  // String roomId;
-  Rooms({
-    this.title,
-    // this.roomId
-  });
+  String roomId;
+  Rooms({this.title, this.roomId});
 
   @override
   _RoomsState createState() => _RoomsState();
@@ -21,7 +18,7 @@ class _RoomsState extends State<Rooms> {
     return Scaffold(
       body: Stack(
         children: [
-          DrawerScreen(),
+          DrawerScreen(roomId: widget.roomId),
           RoomsScreen(
             title: widget.title,
           )
