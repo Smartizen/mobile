@@ -131,30 +131,29 @@ ThunkAction<AppState> createHouse(
           'Authorization': 'Bearer $token',
         },
         body: data);
-    print(response.statusCode);
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse["data"];
-      sharedPreferences.setString("houseID", jsonResponse["id"]);
+      sharedPreferences.setString("houseId", jsonResponse["id"]);
 
       Navigator.of(context).push(
         MaterialPageRoute(builder: (BuildContext context) => Houses()),
       );
-      // TODO add to Farm array
+      // TODO add to House array
     } else {
       print(response.body);
     }
   };
 }
 
-ThunkAction<AppState> deleteHouseAction(context, String houseID) {
+ThunkAction<AppState> deleteHouseAction(context, String houseId) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
     var jsonResponse;
 
     var response =
-        await http.delete(UrlProvider.getHouseDetail(houseID), headers: {
+        await http.delete(UrlProvider.getHouseDetail(houseId), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
@@ -163,8 +162,7 @@ ThunkAction<AppState> deleteHouseAction(context, String houseID) {
     print(response.statusCode);
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
-      print(jsonResponse);
-      store.state.houses.removeWhere((houses) => houses.id == houseID);
+      store.state.houses.removeWhere((houses) => houses.id == houseId);
       store.dispatch(GetHousesAction(store.state.houses));
     } else {
       print(response.body);
@@ -187,8 +185,8 @@ ThunkAction<AppState> getHousesData() {
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       if (jsonResponse != null) {
-        store
-            .dispatch(GetHousesAction(_loadHousesModel(jsonResponse["farms"])));
+        store.dispatch(
+            GetHousesAction(_loadHousesModel(jsonResponse["houses"])));
       }
     } else {
       print(response.body);
@@ -211,13 +209,13 @@ ThunkAction<AppState> getDefaultHousesData(context) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
-    var isHaveHouse = sharedPreferences.containsKey('houseID');
+    var isHaveHouse = sharedPreferences.containsKey('houseId');
     if (isHaveHouse) {
-      var houseID = sharedPreferences.getString("houseID");
+      var houseId = sharedPreferences.getString("houseId");
       var jsonResponse;
 
       var response =
-          await http.get(UrlProvider.getHouseDetail(houseID), headers: {
+          await http.get(UrlProvider.getHouseDetail(houseId), headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Bearer $token',
@@ -225,7 +223,7 @@ ThunkAction<AppState> getDefaultHousesData(context) {
 
       if (response.statusCode == 200) {
         jsonResponse = json.decode(response.body);
-        jsonResponse = jsonResponse["farm"];
+        jsonResponse = jsonResponse["house"];
 
         if (jsonResponse != null) {
           final members = jsonResponse["members"] as List;
@@ -249,7 +247,7 @@ ThunkAction<AppState> getDefaultHousesData(context) {
                   .toList());
           store.dispatch(GetDefaultHouseAction(_defaultHouse));
         } else {
-          sharedPreferences.remove("houseID");
+          sharedPreferences.remove("houseId");
           Navigator.of(context).push(
             MaterialPageRoute(builder: (BuildContext context) => AddHouse()),
           );
@@ -258,7 +256,7 @@ ThunkAction<AppState> getDefaultHousesData(context) {
         print(response.body);
       }
     } else {
-      sharedPreferences.remove("houseID");
+      sharedPreferences.remove("houseId");
       Navigator.of(context).push(
         MaterialPageRoute(builder: (BuildContext context) => AddHouse()),
       );
@@ -280,13 +278,13 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
-    var houseID = sharedPreferences.getString("houseID");
+    var houseId = sharedPreferences.getString("houseId");
 
     var jsonResponse;
 
     Map data = {
       'name': roomName,
-      'farmId': houseID,
+      'houseId': houseId,
       'image': 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
     };
 
@@ -322,7 +320,7 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
 ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
   Map data = {
     'deviceId': deviceId,
-    'cropId': roomId,
+    'roomId': roomId,
   };
 
   return (Store<AppState> store) async {
@@ -338,7 +336,7 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       print(jsonResponse);
-      // TODO add to Farm array
+      // TODO add to House array
     } else {
       print(response.body);
     }

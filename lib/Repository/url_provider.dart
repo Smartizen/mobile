@@ -18,24 +18,24 @@ class UrlProvider {
 
   /// url house
   static String get createNewHouse {
-    return '$base/farm';
+    return '$base/house';
   }
 
   static String get getHouses {
-    return '$base/farm/myFarm';
+    return '$base/house/myHouse';
   }
 
   static String getHouseDetail(String id) {
-    return '$base/farm/$id';
+    return '$base/house/$id';
   }
 
   /// url rooms
   static String get createNewRoom {
-    return '$base/crop';
+    return '$base/room';
   }
 
   static String getRoomDetail(String id) {
-    return '$base/crop/$id';
+    return '$base/room/$id';
   }
 
   /// Device

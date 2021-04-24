@@ -38,7 +38,7 @@ class _AddHouseState extends State<AddHouse> {
 
   welcomeDialog() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    var isHaveHouse = sharedPreferences.containsKey('houseID');
+    var isHaveHouse = sharedPreferences.containsKey('houseId');
     if (!isHaveHouse)
       return showDialog(
           context: context,

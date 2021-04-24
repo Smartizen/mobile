@@ -41,7 +41,7 @@ class ModalFit extends StatelessWidget {
 
   selectHouseDefault(context, housesModel) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("houseID", housesModel.toJson()["id"]);
+    sharedPreferences.setString("houseId", housesModel.toJson()["id"]);
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (BuildContext context) => Home()),
         ModalRoute.withName('/Home'));
