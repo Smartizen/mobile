@@ -21,6 +21,7 @@ class _RoomsState extends State<Rooms> {
           DrawerScreen(roomId: widget.roomId),
           RoomsScreen(
             title: widget.title,
+            roomId: widget.roomId,
           )
         ],
       ),

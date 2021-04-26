@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:smartizen/Components/RoomDetails.dart';
+import 'package:smartizen/Screens/Rooms/Component/DeviceDetails.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'dart:convert';
 
 //ignore: must_be_immutable
-class Room extends StatefulWidget {
-  String title;
+class Device extends StatefulWidget {
+  String deviceName;
   String roomId;
-  Room({this.title, this.roomId});
+  Device({this.deviceName, this.roomId});
   @override
-  _RoomState createState() => _RoomState();
+  _DeviceState createState() => _DeviceState();
 }
 
-class _RoomState extends State<Room> {
+class _DeviceState extends State<Device> {
   stt.SpeechToText _speech;
   bool _isListening = false;
   String _text = 'Press the button and start speaking';
@@ -28,7 +28,7 @@ class _RoomState extends State<Room> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff202227),
+      backgroundColor: const Color(0x00000000),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: AvatarGlow(
         animate: _isListening,
@@ -42,15 +42,27 @@ class _RoomState extends State<Room> {
           child: Icon(_isListening ? Icons.mic : Icons.mic_none),
         ),
       ),
-      appBar: AppBar(
-        backgroundColor: const Color(0xff202227),
-        title: Text(widget.title),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(child: RoomDetails()),
-        ],
+      body: Container(
+        decoration: BoxDecoration(
+          color: const Color(0xff202227),
+          borderRadius: BorderRadius.all(
+            Radius.circular(40),
+          ),
+        ),
+        margin: EdgeInsets.all(20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                widget.roomId,
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+            ),
+            Expanded(child: DeviceDetails()),
+          ],
+        ),
       ),
     );
   }

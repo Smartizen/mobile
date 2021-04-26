@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smartizen/Screens/Rooms/Component/Room.dart';
+import 'package:smartizen/Screens/Rooms/Component/Device.dart';
 import 'package:smartizen/Screens/Rooms/Rooms.dart';
 import 'package:smartizen/Screens/Rooms/RoomsScreen.dart';
 

@@ -1,6 +1,7 @@
 import 'package:barcode_scan/platform_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:smartizen/Components/alert.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'dart:convert';
@@ -130,7 +131,13 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ),
             ),
             GestureDetector(
-              onTap: () => {print("Xoa phong")},
+              onTap: () => {
+                showDialog(
+                  context: context,
+                  // TODO
+                  builder: (_) => FunkyOverlay(),
+                )
+              },
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(

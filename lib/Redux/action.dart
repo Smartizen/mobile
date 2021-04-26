@@ -4,6 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/default_house.dart';
+import 'package:smartizen/Models/devices.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
@@ -41,6 +42,7 @@ ThunkAction<AppState> signin(context, String email, String password) {
             ModalRoute.withName('/Home'));
       }
     } else {
+      print("singin");
       print(response.body);
     }
   };
@@ -71,6 +73,7 @@ ThunkAction<AppState> signup(context, String email, String password,
             ModalRoute.withName('/Home'));
       }
     } else {
+      print("singUp");
       print(response.body);
     }
   };
@@ -97,6 +100,7 @@ ThunkAction<AppState> auth(context) {
           MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
           ModalRoute.withName('/SignIn'));
     } else {
+      print("auth");
       print(response.body);
     }
   };
@@ -141,6 +145,7 @@ ThunkAction<AppState> createHouse(
       );
       // TODO add to House array
     } else {
+      print("createHouse");
       print(response.body);
     }
   };
@@ -150,7 +155,6 @@ ThunkAction<AppState> deleteHouseAction(context, String houseId) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
-    var jsonResponse;
 
     var response =
         await http.delete(UrlProvider.getHouseDetail(houseId), headers: {
@@ -161,10 +165,10 @@ ThunkAction<AppState> deleteHouseAction(context, String houseId) {
 
     print(response.statusCode);
     if (response.statusCode == 200) {
-      jsonResponse = json.decode(response.body);
       store.state.houses.removeWhere((houses) => houses.id == houseId);
       store.dispatch(GetHousesAction(store.state.houses));
     } else {
+      print("deleteHouseAction");
       print(response.body);
     }
   };
@@ -189,6 +193,7 @@ ThunkAction<AppState> getHousesData() {
             GetHousesAction(_loadHousesModel(jsonResponse["houses"])));
       }
     } else {
+      print("getHousesData");
       print(response.body);
     }
   };
@@ -241,7 +246,7 @@ ThunkAction<AppState> getDefaultHousesData(context) {
                   .map((room) => ApplianceBox(
                         title: room["name"],
                         boxInfo:
-                            room["devices"].length.toString() + " Thiết bị",
+                            room["actives"].length.toString() + " Thiết bị",
                         roomId: room["id"],
                       ))
                   .toList());
@@ -253,6 +258,7 @@ ThunkAction<AppState> getDefaultHousesData(context) {
           );
         }
       } else {
+        print("getDefaultHousesData");
         print(response.body);
       }
     } else {
@@ -299,7 +305,7 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       final newRoom = Rooms(
-          id: jsonResponse["id"], name: jsonResponse["name"], devices: []);
+          id: jsonResponse["id"], name: jsonResponse["name"], actives: []);
 
       final newRoomBoxs = ApplianceBox(
         title: jsonResponse["name"],
@@ -312,10 +318,38 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
       store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
       Navigator.pop(context);
     } else {
+      print("createNewRoom");
       print(response.body);
     }
   };
 }
+
+ThunkAction<AppState> deleteRoomAction(context, String roomId) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+
+    var response =
+        await http.delete(UrlProvider.getHouseDetail(roomId), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      // store.state.houses.removeWhere((houses) => houses.id == houseId);
+      // store.dispatch(GetHousesAction(store.state.houses));
+    } else {
+      print("deleteRoomAction");
+      print(response.body);
+    }
+  };
+}
+
+////////////////////////////////////////////
+/// Device
+////////////////////////////////////////////
 
 ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
   Map data = {
@@ -326,7 +360,6 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
-    var jsonResponse;
 
     var response = await http.post(UrlProvider.addDevice,
         headers: {
@@ -334,10 +367,21 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
         },
         body: data);
     if (response.statusCode == 201) {
-      jsonResponse = json.decode(response.body);
-      print(jsonResponse);
-      // TODO add to House array
+      int roomIndex = store.state.defaultHouse.rooms
+          .indexWhere((room) => room.id == roomId);
+
+      print(roomIndex);
+      int numberDevice =
+          store.state.defaultHouse.rooms[roomIndex].actives.length + 1;
+      print(numberDevice);
+      store.state.defaultHouse.roomBoxs[roomIndex].boxInfo =
+          numberDevice.toString() + " Thiết bị";
+
+      await store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
+
+      Navigator.pop(context);
     } else {
+      print("addDevice");
       print(response.body);
     }
   };

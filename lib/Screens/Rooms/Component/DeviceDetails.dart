@@ -4,12 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
-class RoomDetails extends StatefulWidget {
+class DeviceDetails extends StatefulWidget {
   @override
-  _RoomDetailsState createState() => _RoomDetailsState();
+  _DeviceDetailsState createState() => _DeviceDetailsState();
 }
 
-class _RoomDetailsState extends State<RoomDetails> {
+class _DeviceDetailsState extends State<DeviceDetails> {
   Future getSensorData() async {
     Map<String, dynamic> jsonResponse;
     Map data = {'sensor': "1"};

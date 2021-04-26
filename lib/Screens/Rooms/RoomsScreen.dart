@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartizen/Screens/Rooms/Component/CardWidget.dart';
+import 'package:smartizen/Screens/Rooms/Component/Device.dart';
 import 'package:smartizen/Screens/Rooms/Component/transformer_form.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
@@ -32,9 +33,8 @@ List<Map> drawerItems = [
 //ignore: must_be_immutable
 class RoomsScreen extends StatefulWidget {
   String title;
-  RoomsScreen({
-    this.title,
-  });
+  String roomId;
+  RoomsScreen({this.title, this.roomId});
 
   @override
   _RoomsScreenState createState() => _RoomsScreenState();
@@ -140,9 +140,9 @@ class _RoomsScreenState extends State<RoomsScreen> {
                 final title = Texts.titles[index];
                 final subtitle = Texts.subtitles[index];
 
-                return CardWidget(
-                  title: title,
-                  subtitle: subtitle,
+                return Device(
+                  deviceName: title,
+                  roomId: subtitle,
                 );
               },
             ),
