@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Screens/Rooms/Component/CardWidget.dart';
 import 'package:smartizen/Screens/Rooms/Component/Device.dart';
 import 'package:smartizen/Screens/Rooms/Component/transformer_form.dart';
@@ -20,15 +22,6 @@ class Texts {
     'Spaghetti is a long, thin, solid, cylindrical noodle pasta. It is a staple food of traditional Italian cuisine. '
   ];
 }
-
-List<Map> drawerItems = [
-  {'icon': Icons.check_circle_outline, 'title': 'Adoption'},
-  {'icon': Icons.mail, 'title': 'Donation'},
-  {'icon': Icons.mail, 'title': 'Add pet'},
-  {'icon': Icons.favorite, 'title': 'Favorites'},
-  {'icon': Icons.mail, 'title': 'Messages'},
-  {'icon': Icons.mail, 'title': 'Profile'},
-];
 
 //ignore: must_be_immutable
 class RoomsScreen extends StatefulWidget {
@@ -124,29 +117,37 @@ class _RoomsScreenState extends State<RoomsScreen> {
             ],
           ),
           body: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xff202227),
-              borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(isDrawerOpen ? 40 : 0.0),
-                  bottomRight: Radius.circular(isDrawerOpen ? 40 : 0.0)),
-            ),
-            // backgroundColor: const Color(0xff202227),
-            child: TransformerPageView(
-              scrollDirection: Axis.vertical,
-              curve: Curves.easeInBack,
-              transformer: transformers[5], // transformers[5],
-              itemCount: Texts.titles.length,
-              itemBuilder: (context, index) {
-                final title = Texts.titles[index];
-                final subtitle = Texts.subtitles[index];
+              decoration: BoxDecoration(
+                color: const Color(0xff202227),
+                borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(isDrawerOpen ? 40 : 0.0),
+                    bottomRight: Radius.circular(isDrawerOpen ? 40 : 0.0)),
+              ),
+              // backgroundColor: const Color(0xff202227),
+              child: StoreConnector<AppState, AppState>(
+                  converter: (store) => store.state,
+                  builder: (context, state) {
+                    return TransformerPageView(
+                      scrollDirection: Axis.vertical,
+                      curve: Curves.easeInBack,
+                      transformer: transformers[5], // transformers[5],
+                      itemCount: state.roomDetail.devices.length,
+                      itemBuilder: (context, index) {
+                        final deviceId =
+                            state.roomDetail.devices[index].deviceId;
+                        final description =
+                            state.roomDetail.devices[index].description;
+                        final functions =
+                            state.roomDetail.devices[index].functions;
 
-                return Device(
-                  deviceName: title,
-                  roomId: subtitle,
-                );
-              },
-            ),
-          ),
+                        return Device(
+                            deviceId: deviceId,
+                            description: description,
+                            roomId: widget.roomId,
+                            functions: functions);
+                      },
+                    );
+                  })),
         ),
       ),
     );

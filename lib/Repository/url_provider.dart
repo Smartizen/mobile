@@ -38,7 +38,7 @@ class UrlProvider {
     return '$base/room/$id';
   }
 
-  /// Device
+  /// Acvive
   static String get addDevice {
     return '$base/active';
   }

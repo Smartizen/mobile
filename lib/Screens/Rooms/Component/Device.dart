@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Screens/Rooms/Component/DeviceDetails.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'dart:convert';
 
 //ignore: must_be_immutable
 class Device extends StatefulWidget {
-  String deviceName;
+  String deviceId;
   String roomId;
-  Device({this.deviceName, this.roomId});
+  String description;
+  var functions;
+  Device({this.deviceId, this.roomId, this.description, this.functions});
   @override
   _DeviceState createState() => _DeviceState();
 }
@@ -56,7 +59,7 @@ class _DeviceState extends State<Device> {
             Padding(
               padding: const EdgeInsets.all(20.0),
               child: Text(
-                widget.roomId,
+                widget.deviceId,
                 style: TextStyle(color: Colors.white, fontSize: 18),
               ),
             ),

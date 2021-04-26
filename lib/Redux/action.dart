@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/default_house.dart';
-import 'package:smartizen/Models/devices.dart';
+import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
@@ -324,13 +324,44 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
   };
 }
 
+ThunkAction<AppState> getRoomDetail(context, String roomId) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response = await http.get(UrlProvider.getRoomDetail(roomId), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse["data"];
+      print(jsonResponse["devices"]);
+
+      // convert list type
+      final roomDetail = RoomDetail(
+          devices: jsonResponse["devices"]
+              .map<Device>((device) => Device.fromJson(device))
+              .toList());
+
+      store.dispatch(GetRoomDetailAction(roomDetail));
+    } else {
+      print("getRoomDetailAction");
+      print(response.body);
+    }
+  };
+}
+
 ThunkAction<AppState> deleteRoomAction(context, String roomId) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
 
     var response =
-        await http.delete(UrlProvider.getHouseDetail(roomId), headers: {
+        await http.delete(UrlProvider.getRoomDetail(roomId), headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
       'Authorization': 'Bearer $token',
@@ -345,6 +376,12 @@ ThunkAction<AppState> deleteRoomAction(context, String roomId) {
       print(response.body);
     }
   };
+}
+
+class GetRoomDetailAction {
+  final RoomDetail _roomDetail;
+  RoomDetail get roomDetail => this._roomDetail;
+  GetRoomDetailAction(this._roomDetail);
 }
 
 ////////////////////////////////////////////
