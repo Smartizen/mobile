@@ -174,7 +174,7 @@ ThunkAction<AppState> deleteHouseAction(context, String houseId) {
   };
 }
 
-ThunkAction<AppState> getHousesData() {
+ThunkAction<AppState> getHousesData(context, bool isSetHouse) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
@@ -189,8 +189,21 @@ ThunkAction<AppState> getHousesData() {
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       if (jsonResponse != null) {
-        store.dispatch(
-            GetHousesAction(_loadHousesModel(jsonResponse["houses"])));
+        if (jsonResponse["houses"].length == 0) {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (BuildContext context) => AddHouse()),
+          );
+        } else {
+          if (isSetHouse) {
+            var isHaveHouse = sharedPreferences.containsKey('houseId');
+            if (!isHaveHouse)
+              sharedPreferences.setString(
+                  "houseId", jsonResponse['houses'][0]["id"]);
+          } else {
+            store.dispatch(
+                GetHousesAction(_loadHousesModel(jsonResponse["houses"])));
+          }
+        }
       }
     } else {
       print("getHousesData");

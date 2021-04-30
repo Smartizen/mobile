@@ -20,7 +20,7 @@ class _HousesBodyState extends State<HousesBody> {
   fetchData() async {
     final store = StoreProvider.of<AppState>(context);
 
-    await store.dispatch(getHousesData());
+    await store.dispatch(getHousesData(context, false));
     setState(() {
       _isLoading = false;
     });

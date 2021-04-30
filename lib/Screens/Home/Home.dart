@@ -66,6 +66,7 @@ class _HomeState extends State<Home> {
     final store = StoreProvider.of<AppState>(context);
 
     await store.dispatch(auth(context));
+    await store.dispatch(getHousesData(context, true));
     await store.dispatch(getDefaultHousesData(context));
     setState(() {
       _isLoading = false;
