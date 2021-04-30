@@ -436,3 +436,43 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
     }
   };
 }
+
+ThunkAction<AppState> getCurrentDevice(context, String deviceId) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response =
+        await http.get(UrlProvider.getDeviceDetail(deviceId), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse["data"];
+
+      // convert list type
+      final device = Device(
+          id: jsonResponse["id"],
+          deviceId: jsonResponse["deviceId"],
+          description: jsonResponse["description"],
+          functions: jsonResponse["functions"]
+              .map<Functions>((function) => Functions.fromJson(function))
+              .toList());
+
+      store.dispatch(GetCurrentDeviceAction(device));
+    } else {
+      print("getCurrentDeviceAction");
+      print(response.body);
+    }
+  };
+}
+
+class GetCurrentDeviceAction {
+  final Device _currentDevice;
+  Device get currentDevice => this._currentDevice;
+  GetCurrentDeviceAction(this._currentDevice);
+}

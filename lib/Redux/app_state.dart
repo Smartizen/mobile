@@ -9,15 +9,21 @@ class AppState {
   final List<HousesModel> houses;
   final DefaultHouse defaultHouse;
   final RoomDetail roomDetail;
+  final Device currentDevice;
 
   AppState(
       {@required this.user,
       @required this.houses,
       @required this.defaultHouse,
-      @required this.roomDetail});
+      @required this.roomDetail,
+      @required this.currentDevice});
 
   factory AppState.initial() {
     return AppState(
-        user: null, houses: [], defaultHouse: null, roomDetail: null);
+        user: null,
+        houses: [],
+        defaultHouse: null,
+        roomDetail: null,
+        currentDevice: null);
   }
 }

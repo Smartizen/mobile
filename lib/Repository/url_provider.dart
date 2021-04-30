@@ -46,4 +46,9 @@ class UrlProvider {
   static String getAllDevice(String id) {
     return '$base/active/$id';
   }
+
+  /// Device
+  static String getDeviceDetail(String id) {
+    return '$base/device/$id';
+  }
 }
