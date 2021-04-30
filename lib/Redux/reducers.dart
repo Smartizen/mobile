@@ -7,7 +7,7 @@ AppState appReducer(state, action) {
       houses: housesReducer(state.houses, action),
       defaultHouse: defaultHousesReducer(state.defaultHouse, action),
       roomDetail: roomDetailReducer(state.roomDetail, action),
-      currentDevice: roomDetailReducer(state.currentDevice, action));
+      currentDevice: currentDeviceReducer(state.currentDevice, action));
 }
 
 userReducer(user, action) {

@@ -352,7 +352,6 @@ ThunkAction<AppState> getRoomDetail(context, String roomId) {
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse["data"];
-      print(jsonResponse["devices"]);
 
       // convert list type
       final roomDetail = RoomDetail(
@@ -380,7 +379,6 @@ ThunkAction<AppState> deleteRoomAction(context, String roomId) {
       'Authorization': 'Bearer $token',
     });
 
-    print(response.statusCode);
     if (response.statusCode == 200) {
       // store.state.houses.removeWhere((houses) => houses.id == houseId);
       // store.dispatch(GetHousesAction(store.state.houses));
@@ -453,6 +451,7 @@ ThunkAction<AppState> getCurrentDevice(context, String deviceId) {
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse["data"];
+      print(jsonResponse);
 
       // convert list type
       final device = Device(
