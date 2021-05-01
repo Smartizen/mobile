@@ -42,23 +42,27 @@ class _DeviceState extends State<Device> {
   fetchCurrentDevice() async {
     final store = StoreProvider.of<AppState>(context);
     await store.dispatch(getCurrentDevice(context, widget.deviceId));
-    setState(() {
-      _isLoading = false;
-    });
+    if (mounted)
+      setState(() {
+        _isLoading = false;
+      });
   }
 
   void connectSocket() {
     // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
     socket = IO.io(UrlProvider.socketConnection, <String, dynamic>{
       "transports": ["websocket"],
-      "autoConnect": false,
+      // "autoConnect": false,
     });
-    socket.connect();
+    socket.io
+      ..disconnect()
+      ..connect();
     socket.onConnect((data) {
       print("Connected");
       socket.on(widget.deviceId, (msg) {
         // socket.on("Gen2_1", (msg) {
         if (mounted) {
+          print(msg["message"]);
           setState(() {
             deviceData = msg["message"];
           });
@@ -125,6 +129,13 @@ class _DeviceState extends State<Device> {
                                         state.currentDevice.functions.length,
                                     itemBuilder: (context, index) =>
                                         GestureDetector(
+                                      onTap: () {
+                                        if (state.currentDevice.functions[index]
+                                                .command !=
+                                            null) {
+                                          print("on");
+                                        }
+                                      },
                                       child: Container(
                                         decoration: BoxDecoration(
                                             color:
@@ -132,6 +143,45 @@ class _DeviceState extends State<Device> {
                                             borderRadius:
                                                 BorderRadius.circular(27)),
                                         child: Container(
+                                          decoration: state
+                                                          .currentDevice
+                                                          .functions[index]
+                                                          .command !=
+                                                      null &&
+                                                  deviceData != null &&
+                                                  deviceData[state
+                                                          .currentDevice
+                                                          .functions[index]
+                                                          .description] ==
+                                                      1
+                                              ? BoxDecoration(
+                                                  gradient: RadialGradient(
+                                                    colors: [
+                                                      Color(0xff5fe686)
+                                                          .withOpacity(0.26),
+                                                      Color(0xff262d2e)
+                                                          .withOpacity(0.23)
+                                                    ],
+                                                    radius: 0.72,
+                                                    center: Alignment(0, 0),
+                                                  ),
+                                                  border: Border.all(
+                                                      width: 4,
+                                                      color: const Color(
+                                                          0xff5fe686)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(27),
+                                                  boxShadow: [
+                                                      BoxShadow(
+                                                          offset: const Offset(
+                                                              0, 3),
+                                                          blurRadius: 6,
+                                                          color:
+                                                              Color(0xff000000)
+                                                                  .withOpacity(
+                                                                      0.16))
+                                                    ])
+                                              : null,
                                           child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
