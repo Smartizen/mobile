@@ -2,6 +2,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UrlProvider {
   static String base = DotEnv().env['API_URL'];
+  static String socket = DotEnv().env['SOCKET'];
 
   /// url auth
   static String get auth {
@@ -50,5 +51,10 @@ class UrlProvider {
   /// Device
   static String getDeviceDetail(String id) {
     return '$base/device/$id';
+  }
+
+  /// Socket
+  static String get socketConnection {
+    return '$socket';
   }
 }

@@ -4,10 +4,13 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/Rooms/Component/DeviceDetails.dart';
+
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'dart:convert';
 
@@ -27,10 +30,13 @@ class _DeviceState extends State<Device> {
   bool _isListening = false;
   String _text = 'Press the button and start speaking';
   bool _isLoading = true;
+  IO.Socket socket;
+  Map<String, dynamic> deviceData;
 
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
+    connectSocket();
   }
 
   fetchCurrentDevice() async {
@@ -41,15 +47,24 @@ class _DeviceState extends State<Device> {
     });
   }
 
-  Future getSensorData() async {
-    Map<String, dynamic> jsonResponse;
-    Map data = {'sensor': "1"};
-    var response =
-        await http.post(DotEnv().env['IBM_CLOUD'] + "/sensorData", body: data);
-    if (response.statusCode == 201) {
-      jsonResponse = jsonDecode(response.body);
-    }
-    print("jsonResponse ${jsonResponse['data']}");
+  void connectSocket() {
+    // MessageModel messageModel = MessageModel(sourceId: widget.sourceChat.id.toString(),targetId: );
+    socket = IO.io(UrlProvider.socketConnection, <String, dynamic>{
+      "transports": ["websocket"],
+      "autoConnect": false,
+    });
+    socket.connect();
+    socket.onConnect((data) {
+      print("Connected");
+      socket.on(widget.deviceId, (msg) {
+        // socket.on("Gen2_1", (msg) {
+        if (mounted) {
+          setState(() {
+            deviceData = msg["message"];
+          });
+        }
+      });
+    });
   }
 
   @override
@@ -98,8 +113,7 @@ class _DeviceState extends State<Device> {
                             margin: EdgeInsets.fromLTRB(18, 20, 18, 20),
                             child: _isLoading
                                 ? Center(child: CircularProgressIndicator())
-                                : Expanded(
-                                    child: StaggeredGridView.countBuilder(
+                                : StaggeredGridView.countBuilder(
                                     physics: BouncingScrollPhysics(),
                                     crossAxisCount: 2,
                                     crossAxisSpacing: 15,
@@ -133,32 +147,26 @@ class _DeviceState extends State<Device> {
                                                         .withOpacity(0.7)),
                                               ),
                                               Container(
-                                                child: StreamBuilder(
-                                                    stream: Stream.periodic(
-                                                            Duration(
-                                                                seconds: 15))
-                                                        .asyncMap((event) =>
-                                                            getSensorData()),
-                                                    builder:
-                                                        (context, snapshot) {
-                                                      return Text(
-                                                        "15" + '°C',
-                                                        style: TextStyle(
-                                                            fontFamily:
-                                                                "SF Rounded",
-                                                            fontSize: 30,
-                                                            color: Colors.white
-                                                                .withOpacity(
-                                                                    0.14)),
-                                                      );
-                                                    }),
-                                              )
+                                                  child: Text(
+                                                deviceData == null
+                                                    ? "Loading..."
+                                                    : deviceData[state
+                                                            .currentDevice
+                                                            .functions[index]
+                                                            .description]
+                                                        .toString(),
+                                                style: TextStyle(
+                                                    fontFamily: "SF Rounded",
+                                                    fontSize: 30,
+                                                    color: Colors.white
+                                                        .withOpacity(0.14)),
+                                              ))
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
-                                  )))),
+                                  ))),
 
                     // Expanded(child: DeviceDetails()),
                   ],

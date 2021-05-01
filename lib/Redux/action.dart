@@ -163,7 +163,6 @@ ThunkAction<AppState> deleteHouseAction(context, String houseId) {
       'Authorization': 'Bearer $token',
     });
 
-    print(response.statusCode);
     if (response.statusCode == 200) {
       store.state.houses.removeWhere((houses) => houses.id == houseId);
       store.dispatch(GetHousesAction(store.state.houses));
@@ -418,10 +417,8 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
       int roomIndex = store.state.defaultHouse.rooms
           .indexWhere((room) => room.id == roomId);
 
-      print(roomIndex);
       int numberDevice =
           store.state.defaultHouse.rooms[roomIndex].actives.length + 1;
-      print(numberDevice);
       store.state.defaultHouse.roomBoxs[roomIndex].boxInfo =
           numberDevice.toString() + " Thiết bị";
 
@@ -451,7 +448,6 @@ ThunkAction<AppState> getCurrentDevice(context, String deviceId) {
     if (response.statusCode == 200) {
       jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse["data"];
-      print(jsonResponse);
 
       // convert list type
       final device = Device(
