@@ -1,5 +1,6 @@
 import 'package:meta/meta.dart';
-import 'package:smartizen/Models/default_house.dart';
+import 'package:smartizen/Models/defaultHouse.dart';
+import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Models/houses.dart';
 
@@ -10,13 +11,15 @@ class AppState {
   final DefaultHouse defaultHouse;
   final RoomDetail roomDetail;
   final Device currentDevice;
+  final Members members;
 
   AppState(
       {@required this.user,
       @required this.houses,
       @required this.defaultHouse,
       @required this.roomDetail,
-      @required this.currentDevice});
+      @required this.currentDevice,
+      @required this.members});
 
   factory AppState.initial() {
     return AppState(
@@ -24,6 +27,7 @@ class AppState {
         houses: [],
         defaultHouse: null,
         roomDetail: null,
-        currentDevice: null);
+        currentDevice: null,
+        members: null);
   }
 }

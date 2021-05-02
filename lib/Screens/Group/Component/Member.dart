@@ -43,7 +43,7 @@ class _MemberState extends State<Member> {
                   Chip(
                     labelPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                     label: Text(
-                      "label",
+                      widget.role == 0 ? "Admin" : "Member",
                       style: TextStyle(
                         color: Colors.white,
                       ),

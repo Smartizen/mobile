@@ -1,4 +1,3 @@
-import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smartizen/Redux/app_state.dart';
@@ -112,12 +111,12 @@ class _GroupState extends State<Group> {
                         physics: AlwaysScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return Member(
-                              id: locations[index]["id"],
-                              firstname: locations[index]["firstname"],
-                              lastname: locations[index]["lastname"],
-                              role: locations[index]["role"]);
+                              id: state.members.members[index].id,
+                              firstname: state.members.members[index].firstname,
+                              lastname: state.members.members[index].lastname,
+                              role: state.members.members[index].role);
                         },
-                        itemCount: locations.length),
+                        itemCount: state.members.members.length),
                   )
                 ]);
           }),

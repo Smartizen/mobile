@@ -1,5 +1,4 @@
 import 'package:smartizen/Components/application_box.dart';
-import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
 
 class DefaultHouse {
@@ -8,7 +7,6 @@ class DefaultHouse {
   String image;
   String lat;
   String long;
-  List<Members> members;
   List<Rooms> rooms;
   List<ApplianceBox> roomBoxs;
 
@@ -18,7 +16,6 @@ class DefaultHouse {
       this.image,
       this.lat,
       this.long,
-      this.members,
       this.rooms,
       this.roomBoxs});
 
@@ -28,7 +25,6 @@ class DefaultHouse {
           String image,
           String lat,
           String long,
-          List<Members> members,
           List<Rooms> rooms,
           List<ApplianceBox> roomBoxs}) =>
       DefaultHouse(
@@ -37,7 +33,6 @@ class DefaultHouse {
         image: image ?? this.image,
         lat: lat ?? this.lat,
         long: long ?? this.long,
-        members: members ?? this.members,
         rooms: rooms ?? this.rooms,
         roomBoxs: roomBoxs ?? this.roomBoxs,
       );
@@ -48,12 +43,6 @@ class DefaultHouse {
     image = json['image'];
     lat = json['lat'];
     long = json['long'];
-    if (json['members'] != null) {
-      members = new List<Members>();
-      json['members'].forEach((v) {
-        members.add(new Members.fromJson(v));
-      });
-    }
     if (json['rooms'] != null) {
       rooms = new List<Rooms>();
       json['rooms'].forEach((v) {
@@ -69,9 +58,6 @@ class DefaultHouse {
     data['image'] = this.image;
     data['lat'] = this.lat;
     data['long'] = this.long;
-    if (this.members != null) {
-      data['members'] = this.members.map((v) => v.toJson()).toList();
-    }
     if (this.rooms != null) {
       data['rooms'] = this.rooms.map((v) => v.toJson()).toList();
     }
@@ -80,6 +66,6 @@ class DefaultHouse {
 
   @override
   String toString() {
-    return 'Default: {id: $id, name: $name,image: $image,lat: $lat,long: $long, members: $members,rooms : $rooms}';
+    return 'Default: {id: $id, name: $name,image: $image,lat: $lat,long: $long, rooms : $rooms}';
   }
 }

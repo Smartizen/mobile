@@ -1,50 +1,79 @@
 class Members {
-  String firstname;
-  String lastname;
-  Manage manage;
+  List<Member> members;
 
-  Members({this.firstname, this.lastname});
+  Members({this.members});
 
   Members.fromJson(Map<String, dynamic> json) {
-    firstname = json['firstname'];
-    lastname = json['lastname'];
-    manage =
-        json['Manage'] != null ? new Manage.fromJson(json['Manage']) : null;
+    if (json != null) {
+      members = new List<Member>();
+      json['members'].forEach((v) {
+        members.add(new Member.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['firstname'] = this.firstname;
-    data['lastname'] = this.lastname;
-    if (this.manage != null) {
-      data['Manage'] = this.manage.toJson();
+
+    if (this != null) {
+      data['members'] = this.members.map((v) => v.toJson()).toList();
     }
     return data;
   }
 
   @override
   String toString() {
-    return 'Member: {firstname: $firstname,lastname: $lastname,manage : $manage}';
+    return 'Members : {members: $members}';
   }
 }
 
-class Manage {
+class Member {
+  String id;
+  String firstname;
+  String lastname;
+  String email;
+  String image;
+  String phonenumber;
+  String gender;
   int role;
 
-  Manage({this.role});
+  Member(
+      {this.id,
+      this.firstname,
+      this.lastname,
+      this.email,
+      this.image,
+      this.phonenumber,
+      this.gender,
+      this.role});
 
-  Manage.fromJson(Map<String, dynamic> json) {
+  Member.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    firstname = json['firstname'];
+    lastname = json['lastname'];
+    email = json['email'];
+    image = json['image'];
+    phonenumber = json['phonenumber'];
+    gender = json['gender'];
     role = json['role'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['firstname'] = this.firstname;
+    data['lastname'] = this.lastname;
+    data['email'] = this.email;
+    data['image'] = this.image;
+    data['phonenumber'] = this.phonenumber;
+    data['gender'] = this.gender;
     data['role'] = this.role;
+
     return data;
   }
 
   @override
   String toString() {
-    return 'role: $role';
+    return 'Member: {id: $id, firstname: $firstname,lastname: $lastname,email : $email,image : $image,phonenumber : $phonenumber,gender : $gender,role : $role}';
   }
 }

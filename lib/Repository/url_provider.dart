@@ -53,6 +53,11 @@ class UrlProvider {
     return '$base/device/$id';
   }
 
+  /// Manage
+  static String getAllMember(String id) {
+    return '$base/manage/$id';
+  }
+
   /// Socket
   static String get socketConnection {
     return '$socket';

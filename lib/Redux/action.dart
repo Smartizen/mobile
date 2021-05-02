@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:smartizen/Components/application_box.dart';
-import 'package:smartizen/Models/default_house.dart';
+import 'package:smartizen/Models/defaultHouse.dart';
+import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Models/houses.dart';
-import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/rooms.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -243,7 +243,7 @@ ThunkAction<AppState> getDefaultHousesData(context) {
         jsonResponse = jsonResponse["house"];
 
         if (jsonResponse != null) {
-          final members = jsonResponse["members"] as List;
+          // final members = jsonResponse["members"] as List;
           final rooms = jsonResponse["rooms"] as List;
           final _defaultHouse = DefaultHouse(
               id: jsonResponse["id"],
@@ -251,8 +251,8 @@ ThunkAction<AppState> getDefaultHousesData(context) {
               image: jsonResponse["image"],
               lat: jsonResponse["lat"],
               long: jsonResponse["long"],
-              members:
-                  members.map((member) => Members.fromJson(member)).toList(),
+              // members:
+              //     members.map((member) => Members.fromJson(member)).toList(),
               rooms: rooms.map((room) => Rooms.fromJson(room)).toList(),
               roomBoxs: rooms
                   .map((room) => ApplianceBox(
@@ -470,4 +470,46 @@ class GetCurrentDeviceAction {
   final Device _currentDevice;
   Device get currentDevice => this._currentDevice;
   GetCurrentDeviceAction(this._currentDevice);
+}
+
+////////////////////////////////////////////
+/// Members
+////////////////////////////////////////////
+
+ThunkAction<AppState> getMembersOfHouse(context) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var houseId = sharedPreferences.getString("houseId");
+
+    var jsonResponse;
+
+    var response = await http.get(UrlProvider.getAllMember(houseId), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse["data"];
+
+      // convert list type
+      final members = Members(
+          members: jsonResponse
+              .map<Member>((member) => Member.fromJson(member))
+              .toList());
+
+      store.dispatch(GetMembersAction(members));
+    } else {
+      print("GetMembersAction");
+      print(response.body);
+    }
+  };
+}
+
+class GetMembersAction {
+  final Members _members;
+  Members get members => this._members;
+  GetMembersAction(this._members);
 }
