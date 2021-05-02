@@ -6,6 +6,8 @@ import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'dart:convert';
 
+import 'package:smartizen/Screens/Home/Home.dart';
+
 //ignore: must_be_immutable
 class DrawerScreen extends StatefulWidget {
   String roomId;
@@ -63,8 +65,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     onPressed: () {
-                      store.dispatch(
-                          addDevice(context, deviceId, widget.roomId));
+                      addDeviceByQr(context, deviceId);
                     },
                   )
                 ],
@@ -72,6 +73,12 @@ class _DrawerScreenState extends State<DrawerScreen> {
             );
           });
         });
+  }
+
+  addDeviceByQr(context, deviceId) async {
+    final store = StoreProvider.of<AppState>(context);
+    await store.dispatch(addDevice(context, deviceId, widget.roomId));
+    (context as Element).reassemble();
   }
 
   @override
@@ -134,8 +141,18 @@ class _DrawerScreenState extends State<DrawerScreen> {
               onTap: () => {
                 showDialog(
                   context: context,
-                  // TODO
-                  builder: (_) => FunkyOverlay(),
+                  builder: (_) => FunkyOverlay(
+                    title: "Bạn có đồng ý xóa phòng này không ?",
+                    onPressed: () async {
+                      final store = StoreProvider.of<AppState>(context);
+                      await store
+                          .dispatch(deleteRoomAction(context, widget.roomId));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Home()),
+                          ModalRoute.withName('/Home'));
+                    },
+                  ),
                 )
               },
               child: Padding(
