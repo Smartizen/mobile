@@ -34,6 +34,7 @@ class Member {
   String email;
   String image;
   String phonenumber;
+  String manageId;
   String gender;
   int role;
 
@@ -44,6 +45,7 @@ class Member {
       this.email,
       this.image,
       this.phonenumber,
+      this.manageId,
       this.gender,
       this.role});
 
@@ -56,6 +58,7 @@ class Member {
     phonenumber = json['phonenumber'];
     gender = json['gender'];
     role = json['role'];
+    manageId = json['manageId'];
   }
 
   Map<String, dynamic> toJson() {
@@ -68,12 +71,13 @@ class Member {
     data['phonenumber'] = this.phonenumber;
     data['gender'] = this.gender;
     data['role'] = this.role;
+    data['manageId'] = this.manageId;
 
     return data;
   }
 
   @override
   String toString() {
-    return 'Member: {id: $id, firstname: $firstname,lastname: $lastname,email : $email,image : $image,phonenumber : $phonenumber,gender : $gender,role : $role}';
+    return 'Member: {id: $id, firstname: $firstname,lastname: $lastname,email : $email,image : $image,phonenumber : $phonenumber,gender : $gender,role : $role,manageId : $manageId}';
   }
 }

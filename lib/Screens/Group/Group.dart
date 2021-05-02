@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Screens/Group/Component/Member.dart';
 
 class Group extends StatefulWidget {
@@ -9,56 +10,33 @@ class Group extends StatefulWidget {
 }
 
 class _GroupState extends State<Group> {
-  List<Map<String, dynamic>> locations = [
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-    {
-      "id": 'Europe/London',
-      "firstname": 'London',
-      "lastname": 'uk.png',
-      "role": 1
-    },
-  ];
+  Future<String> addMember(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
+    TextEditingController email = TextEditingController();
+
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text("Nhập email"),
+            backgroundColor: Colors.blueGrey[50],
+            content: TextField(
+              controller: email,
+              decoration:
+                  InputDecoration(hintText: "ví dụ : NguyenVanA@gmail.com"),
+            ),
+            actions: <Widget>[
+              MaterialButton(
+                elevation: 5.0,
+                child: Text("Gửi"),
+                onPressed: () {
+                  store.dispatch(addNewMember(context, email.text));
+                },
+              )
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +52,7 @@ class _GroupState extends State<Group> {
           offset: Offset(0, 18),
           child: GestureDetector(
             onTap: () {
-              print("add member");
+              addMember(context);
             },
             child: Container(
               margin: EdgeInsets.only(bottom: 30, right: 20),
@@ -114,7 +92,9 @@ class _GroupState extends State<Group> {
                               id: state.members.members[index].id,
                               firstname: state.members.members[index].firstname,
                               lastname: state.members.members[index].lastname,
-                              role: state.members.members[index].role);
+                              email: state.members.members[index].email,
+                              role: state.members.members[index].role,
+                              manageId: state.members.members[index].manageId);
                         },
                         itemCount: state.members.members.length),
                   )

@@ -58,6 +58,10 @@ class UrlProvider {
     return '$base/manage/$id';
   }
 
+  static String get addNewMemberByEmail {
+    return '$base/manage/addByEmail';
+  }
+
   /// Socket
   static String get socketConnection {
     return '$socket';

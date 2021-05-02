@@ -476,6 +476,70 @@ class GetCurrentDeviceAction {
 /// Members
 ////////////////////////////////////////////
 
+ThunkAction<AppState> addNewMember(context, String email) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var houseId = sharedPreferences.getString("houseId");
+
+    var jsonResponse;
+
+    Map data = {
+      'email': email,
+      'houseId': houseId,
+    };
+
+    var response = await http.post(UrlProvider.addNewMemberByEmail,
+        headers: {
+          // 'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: data);
+
+    if (response.statusCode == 201) {
+      jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse["data"];
+      final newMember = Member(
+          id: jsonResponse["id"],
+          firstname: jsonResponse["firstname"],
+          lastname: jsonResponse["lastname"],
+          email: jsonResponse["email"],
+          role: jsonResponse["role"]);
+
+      store.state.members.members.add(newMember);
+      store.dispatch(GetMembersAction(store.state.members));
+      Navigator.pop(context);
+    } else {
+      print("createNewRoom");
+      print(response.body);
+    }
+  };
+}
+
+ThunkAction<AppState> deleteManageAction(context, String manageId) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+
+    var response =
+        await http.delete(UrlProvider.getAllMember(manageId), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      store.state.members.members
+          .removeWhere((member) => member.manageId == manageId);
+      store.dispatch(GetMembersAction(store.state.members));
+    } else {
+      print("deleteMemberAction");
+      print(response.body);
+    }
+  };
+}
+
 ThunkAction<AppState> getMembersOfHouse(context) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
