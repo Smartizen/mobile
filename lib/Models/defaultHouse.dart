@@ -8,25 +8,24 @@ class DefaultHouse {
   String lat;
   String long;
   List<Rooms> rooms;
-  List<ApplianceBox> roomBoxs;
 
-  DefaultHouse(
-      {this.id,
-      this.name,
-      this.image,
-      this.lat,
-      this.long,
-      this.rooms,
-      this.roomBoxs});
+  DefaultHouse({
+    this.id,
+    this.name,
+    this.image,
+    this.lat,
+    this.long,
+    this.rooms,
+  });
 
-  DefaultHouse copyWith(
-          {String id,
-          String name,
-          String image,
-          String lat,
-          String long,
-          List<Rooms> rooms,
-          List<ApplianceBox> roomBoxs}) =>
+  DefaultHouse copyWith({
+    String id,
+    String name,
+    String image,
+    String lat,
+    String long,
+    List<Rooms> rooms,
+  }) =>
       DefaultHouse(
         id: id ?? this.id,
         name: name ?? this.name,
@@ -34,7 +33,6 @@ class DefaultHouse {
         lat: lat ?? this.lat,
         long: long ?? this.long,
         rooms: rooms ?? this.rooms,
-        roomBoxs: roomBoxs ?? this.roomBoxs,
       );
 
   DefaultHouse.fromJson(Map<String, dynamic> json) {

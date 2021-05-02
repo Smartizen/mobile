@@ -246,22 +246,13 @@ ThunkAction<AppState> getDefaultHousesData(context) {
           // final members = jsonResponse["members"] as List;
           final rooms = jsonResponse["rooms"] as List;
           final _defaultHouse = DefaultHouse(
-              id: jsonResponse["id"],
-              name: jsonResponse["name"],
-              image: jsonResponse["image"],
-              lat: jsonResponse["lat"],
-              long: jsonResponse["long"],
-              // members:
-              //     members.map((member) => Members.fromJson(member)).toList(),
-              rooms: rooms.map((room) => Rooms.fromJson(room)).toList(),
-              roomBoxs: rooms
-                  .map((room) => ApplianceBox(
-                        title: room["name"],
-                        boxInfo:
-                            room["actives"].length.toString() + " Thiết bị",
-                        roomId: room["id"],
-                      ))
-                  .toList());
+            id: jsonResponse["id"],
+            name: jsonResponse["name"],
+            image: jsonResponse["image"],
+            lat: jsonResponse["lat"],
+            long: jsonResponse["long"],
+            rooms: rooms.map((room) => Rooms.fromJson(room)).toList(),
+          );
           store.dispatch(GetDefaultHouseAction(_defaultHouse));
         } else {
           sharedPreferences.remove("houseId");
@@ -319,14 +310,7 @@ ThunkAction<AppState> createNewRoom(context, String roomName) {
       final newRoom = Rooms(
           id: jsonResponse["id"], name: jsonResponse["name"], actives: []);
 
-      final newRoomBoxs = ApplianceBox(
-        title: jsonResponse["name"],
-        boxInfo: "0 Thiết bị",
-        roomId: jsonResponse["id"],
-      );
-
       store.state.defaultHouse.rooms.add(newRoom);
-      store.state.defaultHouse.roomBoxs.add(newRoomBoxs);
       store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
       Navigator.pop(context);
     } else {
@@ -417,10 +401,8 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
       int roomIndex = store.state.defaultHouse.rooms
           .indexWhere((room) => room.id == roomId);
 
-      int numberDevice =
-          store.state.defaultHouse.rooms[roomIndex].actives.length + 1;
-      store.state.defaultHouse.roomBoxs[roomIndex].boxInfo =
-          numberDevice.toString() + " Thiết bị";
+      store.state.defaultHouse.rooms[roomIndex].actives
+          .add(Actives(deviceId: deviceId));
 
       await store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
 

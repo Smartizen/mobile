@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Redux/app_state.dart';
 
 class Room extends StatefulWidget {
@@ -29,15 +30,21 @@ class _RoomState extends State<Room> {
         builder: (context, state) {
           return Container(
             margin: EdgeInsets.fromLTRB(18, 20, 18, 20),
-            child: StaggeredGridView.count(
+            child: StaggeredGridView.countBuilder(
               physics: BouncingScrollPhysics(),
               crossAxisCount: 2,
               crossAxisSpacing: 15,
               mainAxisSpacing: 15,
-              children: state.defaultHouse.roomBoxs,
-              staggeredTiles: state.defaultHouse.roomBoxs
-                  .map((item) => StaggeredTile.extent(1, 170))
-                  .toList(),
+              itemCount: state.defaultHouse.rooms.length,
+              itemBuilder: (BuildContext context, int index) => ApplianceBox(
+                title: state.defaultHouse.rooms[index].name,
+                boxInfo:
+                    state.defaultHouse.rooms[index].actives.length.toString() +
+                        " Thiết bị",
+                roomId: state.defaultHouse.rooms[index].id,
+              ),
+              staggeredTileBuilder: (int index) =>
+                  new StaggeredTile.extent(1, 170),
             ),
           );
         });
