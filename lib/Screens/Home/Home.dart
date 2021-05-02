@@ -6,6 +6,7 @@ import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Screens/Group/Group.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/Home/Component/room.dart';
@@ -313,11 +314,16 @@ class _HomeState extends State<Home> {
                   ),
                   IconButton(
                       icon: Icon(
-                        Icons.message,
+                        Icons.group,
                         color: Colors.white.withOpacity(0.1),
                         size: 30,
                       ),
-                      onPressed: null),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Group()),
+                        );
+                      }),
                   IconButton(
                       icon: Icon(
                         Icons.settings,

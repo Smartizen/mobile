@@ -8,6 +8,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/reducers.dart';
 import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
+import 'package:smartizen/Screens/Group/Group.dart';
 
 import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Houses/Houses.dart';
@@ -51,8 +52,9 @@ class MyApp extends StatelessWidget {
             'Home': (context) => Home(),
             'Room': (context) => Rooms(),
             'Profile': (context) => Profile(),
-            "AddHouse": (context) => AddHouse(),
-            'Houses': (context) => Houses()
+            'AddHouse': (context) => AddHouse(),
+            'Houses': (context) => Houses(),
+            'Group': (context) => Group(),
           },
         ));
   }
