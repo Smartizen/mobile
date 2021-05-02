@@ -78,7 +78,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
   addDeviceByQr(context, deviceId) async {
     final store = StoreProvider.of<AppState>(context);
     await store.dispatch(addDevice(context, deviceId, widget.roomId));
-    (context as Element).reassemble();
+    await store.dispatch(getRoomDetail(context, widget.roomId));
   }
 
   @override
