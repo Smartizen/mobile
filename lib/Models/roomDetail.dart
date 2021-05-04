@@ -27,14 +27,21 @@ class RoomDetail {
 }
 
 class Device {
+  String activeId;
   String id;
   String description;
   String deviceId;
   List<Functions> functions;
 
-  Device({this.id, this.description, this.deviceId, this.functions});
+  Device(
+      {this.activeId,
+      this.id,
+      this.description,
+      this.deviceId,
+      this.functions});
 
   Device.fromJson(Map<String, dynamic> json) {
+    activeId = json['activeId'];
     id = json['id'];
     description = json['description'];
     deviceId = json['deviceId'];
@@ -48,6 +55,7 @@ class Device {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['activeId'] = this.activeId;
     data['id'] = this.id;
     data['deviceId'] = this.deviceId;
     data['description'] = this.description;
@@ -60,7 +68,7 @@ class Device {
 
   @override
   String toString() {
-    return 'Device : {id: $id, deviceId: $deviceId,description: $description ,functions : $functions}';
+    return 'Device : {id: $id, activeId: $activeId, deviceId: $deviceId,description: $description ,functions : $functions}';
   }
 }
 

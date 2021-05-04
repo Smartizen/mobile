@@ -4,9 +4,11 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:smartizen/Components/alert.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Repository/url_provider.dart';
+import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Rooms/Component/DeviceDetails.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -19,8 +21,14 @@ class Device extends StatefulWidget {
   String deviceId;
   String roomId;
   String description;
+  String activeId;
   var functions;
-  Device({this.deviceId, this.roomId, this.description, this.functions});
+  Device(
+      {this.deviceId,
+      this.roomId,
+      this.description,
+      this.activeId,
+      this.functions});
   @override
   _DeviceState createState() => _DeviceState();
 }
@@ -105,12 +113,42 @@ class _DeviceState extends State<Device> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Text(
-                        widget.deviceId,
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Text(
+                            widget.deviceId,
+                            style: TextStyle(color: Colors.white, fontSize: 18),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: IconButton(
+                              icon: Icon(Icons.delete, color: Colors.white),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (_) => FunkyOverlay(
+                                    title:
+                                        "Bạn có đồng ý xóa thiết bị này không ?",
+                                    onPressed: () async {
+                                      final store =
+                                          StoreProvider.of<AppState>(context);
+                                      await store.dispatch(removeDevice(
+                                          context, widget.activeId));
+                                      Navigator.of(context).pushAndRemoveUntil(
+                                          MaterialPageRoute(
+                                              builder: (BuildContext context) =>
+                                                  Home()),
+                                          ModalRoute.withName('/Home'));
+                                    },
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
                     ),
                     Expanded(
                         child: Container(

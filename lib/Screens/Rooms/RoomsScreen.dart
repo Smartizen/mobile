@@ -117,12 +117,15 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       itemBuilder: (context, index) {
                         final deviceId =
                             state.roomDetail.devices[index].deviceId;
+                        final activeId =
+                            state.roomDetail.devices[index].activeId;
                         final description =
                             state.roomDetail.devices[index].description;
                         final functions =
                             state.roomDetail.devices[index].functions;
 
                         return Device(
+                            activeId: activeId,
                             deviceId: deviceId,
                             description: description,
                             roomId: widget.roomId,

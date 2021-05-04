@@ -405,10 +405,31 @@ ThunkAction<AppState> addDevice(context, String deviceId, String roomId) {
           .add(Actives(deviceId: deviceId));
 
       await store.dispatch(GetDefaultHouseAction(store.state.defaultHouse));
-
       Navigator.pop(context);
     } else {
       print("addDevice");
+      print(response.body);
+    }
+  };
+}
+
+ThunkAction<AppState> removeDevice(context, String activeId) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response =
+        await http.delete(UrlProvider.getAllDevice(activeId), headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+    } else {
+      print("getCurrentDeviceAction");
       print(response.body);
     }
   };
