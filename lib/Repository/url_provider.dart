@@ -53,6 +53,10 @@ class UrlProvider {
     return '$base/device/$id';
   }
 
+  static String get controlDevice {
+    return '$base/device/command';
+  }
+
   /// Manage
   static String getAllMember(String id) {
     return '$base/manage/$id';

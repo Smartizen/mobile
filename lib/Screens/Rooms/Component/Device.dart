@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:avatar_glow/avatar_glow.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Components/alert.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
-import 'package:smartizen/Screens/Rooms/Component/DeviceDetails.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 import 'package:speech_to_text/speech_to_text.dart' as stt;
-import 'dart:convert';
 
 //ignore: must_be_immutable
 class Device extends StatefulWidget {
@@ -171,7 +169,15 @@ class _DeviceState extends State<Device> {
                                         if (state.currentDevice.functions[index]
                                                 .command !=
                                             null) {
-                                          print("on");
+                                          // check status
+                                          if (deviceData[state
+                                                  .currentDevice
+                                                  .functions[index]
+                                                  .description] ==
+                                              1)
+                                            turnLamp(0);
+                                          else
+                                            turnLamp(1);
                                         }
                                       },
                                       child: Container(
@@ -278,11 +284,11 @@ class _DeviceState extends State<Device> {
             print(_text);
             if (_text == 'Turn on the lamp' || _text == "Bật đèn lên") {
               _text = '';
-              turnLamp("1");
+              turnLamp(1);
             }
             if (_text == 'Turn off the lamp' || _text == "Tắt đèn đi") {
               _text = '';
-              turnLamp("0");
+              turnLamp(0);
             }
           }),
         );
@@ -293,15 +299,26 @@ class _DeviceState extends State<Device> {
     }
   }
 
-  turnLamp(String control) async {
-    var jsonResponse;
-    Map data = {'control': control};
-    var response =
-        await http.post(DotEnv().env['IBM_CLOUD'] + "/led", body: data);
+  turnLamp(int control) async {
+    Map data = {
+      'deviceId': widget.deviceId,
+      'channel': 'control',
+      'command': '{"control": $control}'
+    };
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+
+    var response = await http.post(UrlProvider.controlDevice,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: data);
     if (response.statusCode == 201) {
-      jsonResponse = json.decode(response.body);
-      print('Response : ${response.body}');
+    } else {
+      print("controlDevice");
+      print(response.body);
     }
-    print(jsonResponse);
   }
 }
