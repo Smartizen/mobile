@@ -174,10 +174,23 @@ class _DeviceState extends State<Device> {
                                                   .currentDevice
                                                   .functions[index]
                                                   .description] ==
-                                              1)
+                                              1) {
                                             turnLamp(0);
-                                          else
+                                            setState(() {
+                                              deviceData[state
+                                                  .currentDevice
+                                                  .functions[index]
+                                                  .description] = 0;
+                                            });
+                                          } else {
                                             turnLamp(1);
+                                            setState(() {
+                                              deviceData[state
+                                                  .currentDevice
+                                                  .functions[index]
+                                                  .description] = 1;
+                                            });
+                                          }
                                         }
                                       },
                                       child: Container(
