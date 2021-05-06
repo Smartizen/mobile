@@ -1,11 +1,16 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:http/http.dart' as http;
 
 import "package:shared_preferences/shared_preferences.dart";
 import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
+import 'package:smartizen/Models/message_item.dart';
+import 'package:smartizen/Models/notification_data.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/Group/Group.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
@@ -21,6 +26,10 @@ class _HomeState extends State<Home> {
 
   bool _isLoading = true;
 
+  var items = new List<ListItem>();
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +42,31 @@ class _HomeState extends State<Home> {
       Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (BuildContext context) => SignInScreen()),
           ModalRoute.withName('/SignIn'));
+    } else {
+      checkfirebase();
     }
+  }
+
+  checkfirebase() async {
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        var notificationData = NotificationData.fromJson(message);
+        print("onMessage: $message");
+        //
+        var newItem =
+            new MessageItem(notificationData.title, notificationData.body);
+        notifyNewItemInsert(newItem);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    _firebaseMessaging.getToken().then((String token) {
+      sendTokenToServer(token);
+    });
   }
 
   Future<String> createRoom(BuildContext context) {
@@ -91,6 +124,7 @@ class _HomeState extends State<Home> {
                       : Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // _createList(items),
                             Padding(
                               padding: EdgeInsets.only(left: 25, top: 30),
                               child: Text(
@@ -337,5 +371,42 @@ class _HomeState extends State<Home> {
             ),
           ),
         ));
+  }
+
+  Widget _createList(List<ListItem> data) {
+    return Expanded(
+        child: ListView.builder(
+      itemCount: data.length,
+      itemBuilder: (context, index) {
+        final item = data[index];
+        return ListTile(
+          title: item.buildTitle(context),
+          subtitle: item.buildSubtitle(context),
+        );
+      },
+    ));
+  }
+
+  void notifyNewItemInsert(ListItem newItem) {
+    setState(() {
+      items.insert(0, newItem);
+    });
+  }
+
+  Future<void> sendTokenToServer(String deviceToken) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+
+    Map<String, dynamic> data = {'token': deviceToken, 'platform': 'android'};
+
+    var response = await http.post(UrlProvider.sendToken,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: data);
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
   }
 }

@@ -70,4 +70,9 @@ class UrlProvider {
   static String get socketConnection {
     return '$socket';
   }
+
+  /// Messaging
+  static String get sendToken {
+    return '$base/messaging/send-token';
+  }
 }
