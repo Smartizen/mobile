@@ -9,72 +9,78 @@ class ProfilePic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 130,
-          width: 130,
-          child: Stack(
-            fit: StackFit.expand,
-            // overflow: Overflow.visible,
+    return StoreConnector<AppState, AppState>(
+        converter: (store) => store.state,
+        builder: (context, state) {
+          return Column(
             children: [
-              // TODO : fixed avatar
-              CircleAvatar(
-                radius: 30.0,
-                backgroundImage: NetworkImage(
-                    "https://avatars.githubusercontent.com/u/77471619"),
-                backgroundColor: Colors.transparent,
-              ),
-              Positioned(
-                right: 0,
-                bottom: 0,
-                child: SizedBox(
-                  height: 60,
-                  width: 60,
-                  child: FlatButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                      side: BorderSide(color: Colors.white),
+              SizedBox(
+                height: 130,
+                width: 130,
+                child: Stack(
+                  fit: StackFit.expand,
+                  // overflow: Overflow.visible,
+                  children: [
+                    CircleAvatar(
+                      radius: 30.0,
+                      child: Text(
+                          state.user["firstname"][0] +
+                              state.user["lastname"][0],
+                          style: TextStyle(
+                              fontSize: 24,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold)),
+                      backgroundColor: Colors.grey,
+                      // backgroundImage: NetworkImage(
+                      //     "https://avatars.githubusercontent.com/u/77471619"),
+                      // backgroundColor: Colors.transparent,
                     ),
-                    color: Colors.white.withOpacity(0.03),
-                    onPressed: () {},
-                    child: Icon(
-                      Icons.camera_alt_outlined,
-                      color: Colors.white.withOpacity(0.7),
-                      size: 30,
+                    Positioned(
+                      right: 0,
+                      bottom: 0,
+                      child: SizedBox(
+                        height: 60,
+                        width: 60,
+                        child: FlatButton(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(50),
+                            side: BorderSide(color: Colors.white),
+                          ),
+                          color: Colors.white.withOpacity(0.03),
+                          onPressed: () {},
+                          child: Icon(
+                            Icons.camera_alt_outlined,
+                            color: Colors.white.withOpacity(0.7),
+                            size: 30,
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
+                  ],
                 ),
               ),
+              Container(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          state.user["lastname"],
+                          style: TextStyle(
+                              fontFamily: "SF Rounded",
+                              fontSize: 32,
+                              color: Colors.white),
+                        ),
+                        Text(
+                          state.user["email"],
+                          style: TextStyle(
+                              fontFamily: "SF Rounded",
+                              fontSize: 18,
+                              color: Colors.white.withOpacity(0.6)),
+                        ),
+                      ]))
             ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.only(top: 15),
-          child: StoreConnector<AppState, AppState>(
-              converter: (store) => store.state,
-              builder: (context, state) {
-                return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        state.user["lastname"],
-                        style: TextStyle(
-                            fontFamily: "SF Rounded",
-                            fontSize: 32,
-                            color: Colors.white),
-                      ),
-                      Text(
-                        state.user["email"],
-                        style: TextStyle(
-                            fontFamily: "SF Rounded",
-                            fontSize: 18,
-                            color: Colors.white.withOpacity(0.6)),
-                      ),
-                    ]);
-              }),
-        )
-      ],
-    );
+          );
+        });
   }
 }

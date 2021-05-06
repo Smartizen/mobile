@@ -39,7 +39,21 @@ class _MemberState extends State<Member> {
                 Border.all(width: 1.5, color: Colors.white.withOpacity(0.28)),
             borderRadius: BorderRadius.circular(25)),
         child: Row(children: [
-          Image.asset('assets/profile_pic.png'),
+          Container(
+            padding: EdgeInsets.only(left: 15, right: 12),
+            child: CircleAvatar(
+                radius: 30.0,
+                child: Text(
+                  widget.firstname[0] + widget.lastname[0],
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold, color: Colors.black),
+                ),
+                backgroundColor: Colors.grey
+                // backgroundImage: NetworkImage(
+                //     "https://avatars.githubusercontent.com/u/77471619"),
+                // backgroundColor: Colors.transparent,
+                ),
+          ),
           Container(
             width: 260,
             child: Column(
@@ -62,9 +76,6 @@ class _MemberState extends State<Member> {
                       labelPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       label: Text(
                         widget.role == 0 ? "Admin" : "Member",
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
                       ),
                       // backgroundColor: const Colors(),
                       elevation: 6.0,

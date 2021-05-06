@@ -138,95 +138,7 @@ class _HomeState extends State<Home> {
                             SizedBox(
                               height: 30,
                             ),
-                            Container(
-                              padding: EdgeInsets.only(left: 20),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  Image.asset(
-                                    'assets/lightning.png',
-                                    scale: 0.99,
-                                  ),
-                                  Container(
-                                    padding: EdgeInsets.only(left: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: [
-                                            Text(
-                                              "11.5",
-                                              style: TextStyle(
-                                                  fontFamily: "SF Rounded",
-                                                  fontSize: 54,
-                                                  fontWeight: FontWeight.w200,
-                                                  color: Colors.white
-                                                      .withOpacity(0.78)),
-                                              textAlign: TextAlign.left,
-                                            ),
-                                            SizedBox(width: 10),
-                                            Text(
-                                              "°C",
-                                              style: TextStyle(
-                                                  fontSize: 28,
-                                                  color: Colors.white
-                                                      .withOpacity(0.7)),
-                                            )
-                                          ],
-                                        ),
-                                        Text(
-                                          "Nhiệt độ",
-                                          style: TextStyle(
-                                              fontFamily: 'SF Rounded',
-                                              fontSize: 18,
-                                              letterSpacing: 0.72,
-                                              color: Colors.white
-                                                  .withOpacity(0.15)),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    width: 70,
-                                    height: 29,
-                                    child: Center(
-                                      child: RaisedGradientButton(
-                                          child: Text(
-                                            'LOGOUT',
-                                            style: TextStyle(
-                                                fontFamily: "SF Rounded",
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 10,
-                                                color: Colors.black),
-                                          ),
-                                          gradient: LinearGradient(
-                                            begin: Alignment(0.01, 0.13),
-                                            end: Alignment(0.97, 0.84),
-                                            colors: <Color>[
-                                              Color(0xff79fd7b),
-                                              Color(0xff3dcd98)
-                                            ],
-                                          ),
-                                          onPressed: () {
-                                            sharedPreferences.clear();
-                                            Navigator.of(context)
-                                                .pushAndRemoveUntil(
-                                                    MaterialPageRoute(
-                                                        builder: (BuildContext
-                                                                context) =>
-                                                            SignInScreen()),
-                                                    ModalRoute.withName(
-                                                        '/SignIn'));
-                                          }),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
+                            //
                             SizedBox(height: 40),
                             Container(
                               margin: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -238,7 +150,23 @@ class _HomeState extends State<Home> {
                                       color: Colors.white.withOpacity(0.28)),
                                   borderRadius: BorderRadius.circular(25)),
                               child: Row(children: [
-                                Image.asset('assets/profile_pic.png'),
+                                Container(
+                                  padding: EdgeInsets.only(left: 15, right: 12),
+                                  child: CircleAvatar(
+                                    radius: 30.0,
+                                    child: Text(
+                                      state.user["firstname"][0] +
+                                          state.user["lastname"][0],
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    backgroundColor: Colors.grey,
+                                    // backgroundImage: NetworkImage(
+                                    //     "https://avatars.githubusercontent.com/u/77471619"),
+                                    // backgroundColor: Colors.transparent,
+                                  ),
+                                ),
                                 Container(
                                   padding: EdgeInsets.only(left: 2, right: 12),
                                   child: Column(
