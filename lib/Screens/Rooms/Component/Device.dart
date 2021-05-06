@@ -257,11 +257,26 @@ class _DeviceState extends State<Device> {
                                                   child: Text(
                                                 deviceData == null
                                                     ? "Loading..."
-                                                    : deviceData[state
-                                                            .currentDevice
-                                                            .functions[index]
-                                                            .description]
-                                                        .toString(),
+                                                    : state
+                                                                .currentDevice
+                                                                .functions[
+                                                                    index]
+                                                                .command ==
+                                                            null
+                                                        ? deviceData[state
+                                                                .currentDevice
+                                                                .functions[
+                                                                    index]
+                                                                .description]
+                                                            .toString()
+                                                        : deviceData[state
+                                                                    .currentDevice
+                                                                    .functions[
+                                                                        index]
+                                                                    .description] ==
+                                                                1
+                                                            ? "Bật"
+                                                            : "Tắt",
                                                 style: TextStyle(
                                                     fontFamily: "SF Rounded",
                                                     fontSize: 30,
@@ -295,11 +310,17 @@ class _DeviceState extends State<Device> {
           onResult: (val) => setState(() {
             _text = val.recognizedWords;
             print(_text);
-            if (_text == 'Turn on the lamp' || _text == "Bật đèn lên") {
+            if (_text == 'Bật công tắc' ||
+                _text == "Bật công tắc lên" ||
+                _text == "Bật đèn lên" ||
+                _text == "Bật đèn") {
               _text = '';
               turnLamp(1);
             }
-            if (_text == 'Turn off the lamp' || _text == "Tắt đèn đi") {
+            if (_text == 'Tắt công tắc' ||
+                _text == "Tắt công tắc đi" ||
+                _text == "Tắt đèn đi" ||
+                _text == "Tắt đèn") {
               _text = '';
               turnLamp(0);
             }
