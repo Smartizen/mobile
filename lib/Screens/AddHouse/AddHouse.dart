@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class AddHouse extends StatefulWidget {
   @override
@@ -58,7 +59,7 @@ class _AddHouseState extends State<AddHouse> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xff202227),
+          backgroundColor: AppColors.primaryBackgroud,
           title: Text("Add House"),
         ),
         body: StoreConnector<AppState, AppState>(
@@ -84,7 +85,7 @@ class _AddHouseState extends State<AddHouse> {
                         children: <Widget>[
                           Container(
                             decoration: BoxDecoration(
-                              color: Colors.blueGrey[50],
+                              color: AppColors.footBarBackgroud,
                               borderRadius: BorderRadius.only(
                                   topRight: Radius.circular(40),
                                   topLeft: Radius.circular(40)),
@@ -103,7 +104,7 @@ class _AddHouseState extends State<AddHouse> {
                                         color: Colors.white),
                                     child: TextField(
                                       decoration: InputDecoration(
-                                          hintText: 'Enter Address',
+                                          hintText: 'Nhập địa chỉ',
                                           border: InputBorder.none,
                                           contentPadding: EdgeInsets.only(
                                               left: 15.0, top: 15.0),
@@ -126,7 +127,10 @@ class _AddHouseState extends State<AddHouse> {
                                         left: 25, top: 25, right: 25),
                                     child: Row(
                                       children: [
-                                        Icon(Icons.house_outlined),
+                                        Icon(
+                                          Icons.house_outlined,
+                                          color: AppColors.iconColor,
+                                        ),
                                         Padding(
                                           padding: const EdgeInsets.all(5.0),
                                           child: Text(
@@ -134,7 +138,7 @@ class _AddHouseState extends State<AddHouse> {
                                             style: TextStyle(
                                                 fontFamily: "SF Rounded",
                                                 fontSize: 16,
-                                                color: Colors.black),
+                                                color: AppColors.fontColor),
                                           ),
                                         ),
                                       ],
@@ -152,7 +156,11 @@ class _AddHouseState extends State<AddHouse> {
                                         onPressed: () {
                                           addNewHouse(context);
                                         },
-                                        color: Color(0xFF00a79B),
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                new BorderRadius.circular(
+                                                    20.0)),
+                                        color: Color(0xFF0882fa),
                                         child: Text(
                                           'Xác Nhận',
                                           style: TextStyle(

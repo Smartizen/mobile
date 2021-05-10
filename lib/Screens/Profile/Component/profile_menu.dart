@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class ProfileMenu extends StatelessWidget {
   const ProfileMenu({
@@ -19,13 +20,13 @@ class ProfileMenu extends StatelessWidget {
       child: FlatButton(
         padding: EdgeInsets.all(20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        color: Colors.white.withOpacity(0.03),
+        color: AppColors.whiteOpacityColor,
         onPressed: press,
         child: Row(
           children: [
             Icon(
               icon,
-              color: Colors.white.withOpacity(0.25),
+              color: AppColors.iconColor,
               size: 30,
             ),
             SizedBox(width: 20),
@@ -35,12 +36,12 @@ class ProfileMenu extends StatelessWidget {
                 style: TextStyle(
                     fontFamily: "SF Rounded",
                     fontSize: 21,
-                    color: Colors.white.withOpacity(0.7)),
+                    color: AppColors.fontColor),
               ),
             ),
             Icon(
               Icons.arrow_forward_ios,
-              color: Colors.white.withOpacity(0.25),
+              color: AppColors.iconColor,
             ),
           ],
         ),

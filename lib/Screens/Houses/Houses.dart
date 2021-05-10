@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartizen/Screens/Houses/Component/body.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class Houses extends StatefulWidget {
   @override
@@ -14,10 +15,10 @@ class _HousesState extends State<Houses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff202227),
+      backgroundColor: AppColors.primaryBackgroud,
       appBar: AppBar(
-        backgroundColor: const Color(0xff202227),
-        title: Text("Housing management"),
+        backgroundColor: AppColors.primaryBackgroud,
+        title: Text("Quản lý nhà"),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

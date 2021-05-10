@@ -9,6 +9,7 @@ import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -102,7 +103,7 @@ class _DeviceState extends State<Device> {
           builder: (context, state) {
             return Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xff202227),
+                  color: AppColors.deviceBoxColor,
                   borderRadius: BorderRadius.all(
                     Radius.circular(40),
                   ),
@@ -195,8 +196,7 @@ class _DeviceState extends State<Device> {
                                       },
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color:
-                                                Colors.white.withOpacity(0.03),
+                                            color: AppColors.whiteOpacityColor,
                                             borderRadius:
                                                 BorderRadius.circular(27)),
                                         child: Container(

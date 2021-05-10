@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Screens/Rooms/Component/Device.dart';
 import 'package:smartizen/Screens/Rooms/Component/transformer_form.dart';
+import 'package:smartizen/utils/app_color.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
 
 //ignore: must_be_immutable
@@ -59,7 +60,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
         child: Scaffold(
           backgroundColor: const Color(0x00000000),
           appBar: AppBar(
-            backgroundColor: const Color(0xff202227),
+            backgroundColor: AppColors.primaryBackgroud,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.only(
                 topLeft: Radius.circular(isDrawerOpen ? 40 : 0.0),
@@ -100,12 +101,11 @@ class _RoomsScreenState extends State<RoomsScreen> {
           ),
           body: Container(
               decoration: BoxDecoration(
-                color: const Color(0xff202227),
+                color: AppColors.primaryBackgroud,
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(isDrawerOpen ? 40 : 0.0),
                     bottomRight: Radius.circular(isDrawerOpen ? 40 : 0.0)),
               ),
-              // backgroundColor: const Color(0xff202227),
               child: StoreConnector<AppState, AppState>(
                   converter: (store) => store.state,
                   builder: (context, state) {

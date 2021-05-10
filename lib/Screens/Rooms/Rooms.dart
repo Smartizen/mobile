@@ -4,6 +4,7 @@ import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Screens/Rooms/RoomsScreen.dart';
 import 'package:smartizen/Screens/Rooms/drawerScreen.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 //ignore: must_be_immutable
 class Rooms extends StatefulWidget {
@@ -29,7 +30,7 @@ class _RoomsState extends State<Rooms> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xff202227),
+        backgroundColor: AppColors.primaryBackgroud,
         body: Container(
             child: StoreConnector<AppState, AppState>(
                 onInit: (store) {

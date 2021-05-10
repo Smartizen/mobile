@@ -5,6 +5,7 @@ import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Houses/Component/houses_list_items.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class HousesBody extends StatefulWidget {
   HousesBody({this.items});
@@ -29,7 +30,7 @@ class _HousesBodyState extends State<HousesBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xff202227),
+        backgroundColor: AppColors.primaryBackgroud,
         body: StoreConnector<AppState, AppState>(
             onInit: (store) {
               fetchData();
@@ -59,7 +60,7 @@ class _HousesBodyState extends State<HousesBody> {
                               children: <Widget>[
                                 Container(
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: AppColors.footBarBackgroud,
                                       borderRadius: BorderRadius.only(
                                           topRight: Radius.circular(40),
                                           topLeft: Radius.circular(40)),

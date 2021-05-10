@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Screens/Houses/Component/model_fit.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class HouseListItem extends StatelessWidget {
   const HouseListItem({
@@ -18,16 +19,16 @@ class HouseListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20), topLeft: Radius.circular(20)),
+        color: AppColors.houseBoxColor,
+        borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
       child: ListTile(
           title: Text(
             housesModel.name,
-            style:
-                TextStyle(color: Colors.grey[900], fontWeight: FontWeight.bold),
+            style: TextStyle(
+                color: AppColors.fontColor, fontWeight: FontWeight.bold),
           ),
           subtitle: Text(
             "",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartizen/Screens/Profile/Component/body.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -14,9 +15,9 @@ class _ProfileState extends State<Profile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff202227),
+      backgroundColor: AppColors.primaryBackgroud,
       appBar: AppBar(
-        backgroundColor: const Color(0xff202227),
+        backgroundColor: AppColors.primaryBackgroud,
         title: Text("Profile"),
       ),
       body: Column(

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:smartizen/Screens/Rooms/Component/Device.dart';
 import 'package:smartizen/Screens/Rooms/Rooms.dart';
-import 'package:smartizen/Screens/Rooms/RoomsScreen.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 //ignore: must_be_immutable
 class ApplianceBox extends StatefulWidget {
@@ -34,7 +33,7 @@ class _ApplianceBoxState extends State<ApplianceBox> {
         },
         child: Container(
           decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.03),
+              color: AppColors.whiteOpacityColor,
               borderRadius: BorderRadius.circular(27)),
           child: Container(
             decoration: isSelected
@@ -66,7 +65,7 @@ class _ApplianceBoxState extends State<ApplianceBox> {
                   style: TextStyle(
                       fontFamily: "SF Rounded",
                       fontSize: 21,
-                      color: Colors.white.withOpacity(0.7)),
+                      color: AppColors.fontColor),
                 ),
                 Visibility(
                   visible: widget.image == null ? false : true,

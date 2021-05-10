@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Screens/Group/Component/Member.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class Group extends StatefulWidget {
   @override
@@ -41,9 +42,9 @@ class _GroupState extends State<Group> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff202227),
+      backgroundColor: AppColors.primaryBackgroud,
       appBar: AppBar(
-        backgroundColor: const Color(0xff202227),
+        backgroundColor: AppColors.primaryBackgroud,
         title: Text("Thành viên"),
       ),
       floatingActionButton: Transform.scale(

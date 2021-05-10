@@ -23,7 +23,7 @@ class _ProfileBodyState extends State<ProfileBody> {
           ProfilePic(),
           SizedBox(height: 20),
           ProfileMenu(
-            text: "Housing management",
+            text: "Quản lý nhà",
             icon: Icons.house_outlined,
             press: () {
               Navigator.of(context).push(
@@ -32,18 +32,18 @@ class _ProfileBodyState extends State<ProfileBody> {
             },
           ),
           ProfileMenu(
-            text: "Settings",
+            text: "Cài đặt",
             icon: Icons.settings,
             press: () {},
           ),
           ProfileMenu(
-            text: "Help Center",
+            text: "Trợ giúp",
             // icon: "assets/icons/Question mark.svg",
             icon: Icons.help_outline_outlined,
             press: () {},
           ),
           ProfileMenu(
-            text: "Log Out",
+            text: "Đăng xuất",
             icon: Icons.logout,
             press: () async {
               sharedPreferences = await SharedPreferences.getInstance();

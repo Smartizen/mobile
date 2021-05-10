@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class ProfilePic extends StatelessWidget {
   const ProfilePic({
@@ -46,11 +47,11 @@ class ProfilePic extends StatelessWidget {
                             borderRadius: BorderRadius.circular(50),
                             side: BorderSide(color: Colors.white),
                           ),
-                          color: Colors.white.withOpacity(0.03),
+                          color: AppColors.whiteOpacityColor,
                           onPressed: () {},
                           child: Icon(
                             Icons.camera_alt_outlined,
-                            color: Colors.white.withOpacity(0.7),
+                            color: AppColors.fontColor,
                             size: 30,
                           ),
                         ),

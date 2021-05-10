@@ -15,6 +15,7 @@ import 'package:smartizen/Screens/Group/Group.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/Home/Component/room.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -111,7 +112,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: const Color(0xff202227),
+        backgroundColor: AppColors.primaryBackgroud,
         body: Container(
             child: StoreConnector<AppState, AppState>(
                 onInit: (store) {
@@ -187,8 +188,7 @@ class _HomeState extends State<Home> {
                                         children: [
                                           Icon(
                                             Icons.home,
-                                            color:
-                                                Colors.white.withOpacity(0.25),
+                                            color: AppColors.iconColor,
                                           ),
                                           Text(
                                             state.defaultHouse == null

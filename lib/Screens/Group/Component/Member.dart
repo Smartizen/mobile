@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:smartizen/Screens/Group/Component/model_member_fit.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 //ignore: must_be_immutable
 class Member extends StatefulWidget {
@@ -91,7 +92,7 @@ class _MemberState extends State<Member> {
                       padding: const EdgeInsets.only(right: 5),
                       child: Icon(
                         Icons.email,
-                        color: Colors.white.withOpacity(0.25),
+                        color: AppColors.iconColor,
                       ),
                     ),
                     Text(
@@ -99,7 +100,7 @@ class _MemberState extends State<Member> {
                       style: TextStyle(
                           fontFamily: "SF Rounded",
                           fontSize: 16,
-                          color: Colors.white.withOpacity(0.25)),
+                          color: AppColors.iconColor),
                     ),
                   ],
                 )
