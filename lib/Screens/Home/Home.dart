@@ -12,6 +12,7 @@ import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Repository/url_provider.dart';
 import 'package:smartizen/Screens/Group/Group.dart';
+import 'package:smartizen/Screens/Notification/Notification.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/Home/Component/room.dart';
@@ -254,27 +255,11 @@ class _HomeState extends State<Home> {
                 children: [
                   IconButton(
                       icon: Icon(
-                        Icons.person_pin,
-                        color: Colors.white.withOpacity(0.1),
-                        size: 30,
-                      ),
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (BuildContext context) => Profile()),
-                        );
-                      }),
-                  IconButton(
-                      icon: Icon(
-                        Icons.notifications,
+                        Icons.settings,
                         color: Colors.white.withOpacity(0.1),
                         size: 30,
                       ),
                       onPressed: null),
-                  SizedBox(
-                    height: 80,
-                    width: 60,
-                  ),
                   IconButton(
                       icon: Icon(
                         Icons.group,
@@ -287,13 +272,33 @@ class _HomeState extends State<Home> {
                               builder: (BuildContext context) => Group()),
                         );
                       }),
+                  SizedBox(
+                    height: 80,
+                    width: 60,
+                  ),
                   IconButton(
                       icon: Icon(
-                        Icons.settings,
+                        Icons.notifications,
                         color: Colors.white.withOpacity(0.1),
                         size: 30,
                       ),
-                      onPressed: null),
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                NotificationBox()));
+                      }),
+                  IconButton(
+                      icon: Icon(
+                        Icons.person_pin,
+                        color: Colors.white.withOpacity(0.1),
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Profile()),
+                        );
+                      }),
                 ],
               ),
             ),

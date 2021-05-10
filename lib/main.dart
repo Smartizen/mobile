@@ -16,6 +16,7 @@ import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/Rooms/Rooms.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/SignUpScreen.dart';
+import 'package:smartizen/Screens/Notification/Notification.dart';
 
 import 'package:smartizen/utils/app_logger.dart';
 
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
             'AddHouse': (context) => AddHouse(),
             'Houses': (context) => Houses(),
             'Group': (context) => Group(),
+            'Notification': (context) => NotificationBox()
           },
         ));
   }
