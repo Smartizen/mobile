@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:smartizen/Repository/url_provider.dart';
+import 'package:smartizen/Provider/url_provider.dart';
 import 'package:smartizen/Screens/AddHouse/AddHouse.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Houses/Houses.dart';

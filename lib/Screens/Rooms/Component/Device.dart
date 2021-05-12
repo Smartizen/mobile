@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Components/alert.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
-import 'package:smartizen/Repository/url_provider.dart';
+import 'package:smartizen/Provider/url_provider.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/utils/app_color.dart';
 

@@ -3,7 +3,6 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Screens/Rooms/RoomsScreen.dart';
-import 'package:smartizen/Screens/Rooms/drawerScreen.dart';
 import 'package:smartizen/utils/app_color.dart';
 
 //ignore: must_be_immutable
@@ -42,7 +41,6 @@ class _RoomsState extends State<Rooms> {
                       ? Center(child: CircularProgressIndicator())
                       : Stack(
                           children: [
-                            // DrawerScreen(roomId: widget.roomId),
                             RoomsScreen(
                               title: widget.title,
                               roomId: widget.roomId,

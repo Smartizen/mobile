@@ -4,15 +4,16 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:http/http.dart' as http;
 
 import "package:shared_preferences/shared_preferences.dart";
-import 'package:smartizen/Components/RaiseRadientButton.dart';
 import 'package:smartizen/Components/custom_nav_bar.dart';
 import 'package:smartizen/Models/message_item.dart';
 import 'package:smartizen/Models/notification_data.dart';
+import 'package:smartizen/Provider/notification_plugin_provider.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
-import 'package:smartizen/Repository/url_provider.dart';
+import 'package:smartizen/Provider/url_provider.dart';
 import 'package:smartizen/Screens/Group/Group.dart';
 import 'package:smartizen/Screens/Notification/Notification.dart';
+import 'package:smartizen/Screens/Notification/NotificationScreen.dart';
 import 'package:smartizen/Screens/Profile/Profile.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/Home/Component/room.dart';
@@ -36,6 +37,10 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     checkLoginStatus();
+
+    notificationPlugin
+        .setListenerForLowerVersions(onNotificationInLowerVersions);
+    notificationPlugin.setOnNotificationClick(onNotificationClick);
   }
 
   checkLoginStatus() async {
@@ -57,7 +62,9 @@ class _HomeState extends State<Home> {
         //
         var newItem =
             new MessageItem(notificationData.title, notificationData.body);
-        notifyNewItemInsert(newItem);
+        // notifyNewItemInsert(newItem);
+        await notificationPlugin.showNotification(
+            notificationData.title, notificationData.body);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -110,6 +117,19 @@ class _HomeState extends State<Home> {
     });
   }
 
+  onNotificationInLowerVersions(ReceivedNotification receivedNotification) {
+    print('Notification Received ${receivedNotification.id}');
+  }
+
+  onNotificationClick(String payload) {
+    print('Payload $payload');
+    // Navigator.push(context, MaterialPageRoute(builder: (coontext) {
+    //   return NotificationScreen(
+    //     payload: payload,
+    //   );
+    // }));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -127,6 +147,7 @@ class _HomeState extends State<Home> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             // _createList(items),
+
                             Padding(
                               padding: EdgeInsets.only(left: 25, top: 30),
                               child: Text(
@@ -259,7 +280,9 @@ class _HomeState extends State<Home> {
                         color: Colors.white.withOpacity(0.1),
                         size: 30,
                       ),
-                      onPressed: null),
+                      onPressed: () async {
+                        // await notificationPlugin.showNotification();
+                      }),
                   IconButton(
                       icon: Icon(
                         Icons.group,
