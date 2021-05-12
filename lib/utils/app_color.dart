@@ -8,4 +8,12 @@ class AppColors {
   static Color iconColor = Colors.white.withOpacity(0.25);
   static Color fontColor = Colors.white.withOpacity(0.7);
   static const footBarBackgroud = const Color(0xff353535);
+
+  static TextStyle listTitleDefaultTextStyle = TextStyle(
+      color: Colors.white70, fontSize: 20.0, fontWeight: FontWeight.w600);
+  static TextStyle listTitleSelectedTextStyle = TextStyle(
+      color: Colors.white, fontSize: 20.0, fontWeight: FontWeight.w600);
+
+  static Color selectedColor = Color(0xFF4AC8EA);
+  static Color drawerBackgroundColor = Color(0xFF272D34);
 }

@@ -17,6 +17,7 @@ import 'package:smartizen/Screens/Rooms/Rooms.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
 import 'package:smartizen/Screens/SignUpScreen.dart';
 import 'package:smartizen/Screens/Notification/Notification.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 import 'package:smartizen/utils/app_logger.dart';
 
@@ -44,6 +45,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             primarySwatch: Colors.teal,
+            canvasColor: AppColors.drawerBackgroundColor,
           ),
           home: Home(),
           initialRoute: 'Home',

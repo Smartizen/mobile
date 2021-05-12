@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:smartizen/Components/alert.dart';
 import 'package:smartizen/Redux/app_state.dart';
+import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Screens/Rooms/Component/Device.dart';
 import 'package:smartizen/Screens/Rooms/Component/transformer_form.dart';
 import 'package:smartizen/utils/app_color.dart';
 import 'package:transformer_page_view/transformer_page_view.dart';
+
+import 'package:barcode_scan/platform_wrapper.dart';
+import 'package:smartizen/Redux/action.dart';
+import 'dart:convert';
 
 //ignore: must_be_immutable
 class RoomsScreen extends StatefulWidget {
@@ -17,124 +23,175 @@ class RoomsScreen extends StatefulWidget {
 }
 
 class _RoomsScreenState extends State<RoomsScreen> {
-  double xOffset = 0;
-  double yOffset = 0;
-  double scaleFactor = 1;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  bool isDrawerOpen = false;
+  _showModalBottomSheet(context) {
+    final store = StoreProvider.of<AppState>(context);
+
+    showModalBottomSheet(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+        ),
+        backgroundColor: Colors.white,
+        context: context,
+        builder: (BuildContext context) {
+          String deviceName = "";
+          String deviceId = "";
+          return StatefulBuilder(
+              builder: (BuildContext context, StateSetter mystate) {
+            return Container(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  MaterialButton(
+                    elevation: 5.0,
+                    child: Text("Quét QR code"),
+                    onPressed: () async {
+                      var codeSanner =
+                          await BarcodeScanner.scan(); //barcode scnner
+                      var jsonResponse = json.decode(codeSanner.rawContent);
+
+                      mystate(() {
+                        deviceName = jsonResponse["deviceName"];
+                        deviceId = jsonResponse["deviceId"];
+                      });
+                    },
+                  ),
+                  new Text(
+                    deviceName.length > 0
+                        ? "Xác nhận kết nối : " + deviceName
+                        : "",
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  OutlineButton(
+                    child: Text(
+                      "Kết nối",
+                      style: TextStyle(fontSize: 15.0),
+                    ),
+                    highlightedBorderColor: Colors.red,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    onPressed: () {
+                      addDeviceByQr(context, deviceId);
+                    },
+                  )
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  addDeviceByQr(context, deviceId) async {
+    final store = StoreProvider.of<AppState>(context);
+    await store.dispatch(addDevice(context, deviceId, widget.roomId));
+    await store.dispatch(getRoomDetail(context, widget.roomId));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      transform: Matrix4.translationValues(xOffset, yOffset, 0)
-        ..scale(scaleFactor)
-        ..rotateY(isDrawerOpen ? -0.5 : 0),
-      duration: Duration(milliseconds: 250),
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 2.0,
-          color: isDrawerOpen ? Colors.greenAccent[200] : Color(0xff202227),
-        ),
-        borderRadius: BorderRadius.circular(isDrawerOpen ? 40 : 0.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.greenAccent[200],
-            offset: const Offset(
-              -15.0,
-              15.0,
-            ),
-            blurRadius: 10.0,
-            spreadRadius: 2.0,
-          ),
-        ],
-      ),
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            xOffset = 0;
-            yOffset = 0;
-            scaleFactor = 1;
-            isDrawerOpen = false;
-          });
-        },
-        child: Scaffold(
-          backgroundColor: const Color(0x00000000),
-          appBar: AppBar(
-            backgroundColor: AppColors.primaryBackgroud,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(isDrawerOpen ? 40 : 0.0),
-                topRight: Radius.circular(isDrawerOpen ? 40 : 0.0),
+    return Scaffold(
+      backgroundColor: const Color(0x00000000),
+      key: _scaffoldKey,
+      endDrawer: Drawer(
+        child: ListView(
+          children: [
+            DrawerHeader(
+              child: Text(
+                "Cài đặt",
+                style: AppColors.listTitleDefaultTextStyle,
               ),
             ),
-            title: Text(widget.title),
-            leading: isDrawerOpen
-                ? IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      setState(() {
-                        xOffset = 0;
-                        yOffset = 0;
-                        scaleFactor = 1;
-                        isDrawerOpen = false;
-                      });
-                    },
-                  )
-                : IconButton(
-                    icon: Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.of(context).pop();
+            ListTile(
+              leading: Icon(
+                Icons.add,
+                color: Colors.white,
+                size: 25,
+              ),
+              title: Text(
+                'Thêm thiết bị',
+                style: AppColors.listTitleDefaultTextStyle,
+              ),
+              onTap: () => {_showModalBottomSheet(context)},
+            ),
+            ListTile(
+              leading: Icon(Icons.edit, color: Colors.white, size: 25),
+              title: Text(
+                'Chỉnh sửa phòng',
+                style: AppColors.listTitleDefaultTextStyle,
+              ),
+            ),
+            ListTile(
+              onTap: () => {
+                showDialog(
+                  context: context,
+                  builder: (_) => FunkyOverlay(
+                    title: "Bạn có đồng ý xóa phòng này không ?",
+                    onPressed: () async {
+                      final store = StoreProvider.of<AppState>(context);
+                      await store
+                          .dispatch(deleteRoomAction(context, widget.roomId));
+                      Navigator.of(context).pushAndRemoveUntil(
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => Home()),
+                          ModalRoute.withName('/Home'));
                     },
                   ),
-            actions: <Widget>[
-              IconButton(
-                  icon: Icon(Icons.menu),
-                  onPressed: () {
-                    setState(() {
-                      xOffset = 230;
-                      yOffset = 150;
-                      scaleFactor = 0.6;
-                      isDrawerOpen = true;
-                    });
-                  }),
-            ],
-          ),
-          body: Container(
-              decoration: BoxDecoration(
-                color: AppColors.primaryBackgroud,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(isDrawerOpen ? 40 : 0.0),
-                    bottomRight: Radius.circular(isDrawerOpen ? 40 : 0.0)),
-              ),
-              child: StoreConnector<AppState, AppState>(
-                  converter: (store) => store.state,
-                  builder: (context, state) {
-                    return TransformerPageView(
-                      scrollDirection: Axis.vertical,
-                      curve: Curves.easeInBack,
-                      transformer: transformers[5], // transformers[5],
-                      itemCount: state.roomDetail.devices.length,
-                      itemBuilder: (context, index) {
-                        final deviceId =
-                            state.roomDetail.devices[index].deviceId;
-                        final activeId =
-                            state.roomDetail.devices[index].activeId;
-                        final description =
-                            state.roomDetail.devices[index].description;
-                        final functions =
-                            state.roomDetail.devices[index].functions;
-
-                        return Device(
-                            activeId: activeId,
-                            deviceId: deviceId,
-                            description: description,
-                            roomId: widget.roomId,
-                            functions: functions);
-                      },
-                    );
-                  })),
+                )
+              },
+              leading:
+                  Icon(Icons.delete_outline, color: Colors.white, size: 25),
+              title:
+                  Text('Xóa phòng', style: AppColors.listTitleDefaultTextStyle),
+            ),
+          ],
         ),
       ),
+      appBar: AppBar(
+        backgroundColor: AppColors.primaryBackgroud,
+        title: Text(widget.title),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () => _scaffoldKey.currentState.openEndDrawer(),
+          )
+        ],
+      ),
+      body: Container(
+          decoration: BoxDecoration(
+            color: AppColors.primaryBackgroud,
+          ),
+          child: StoreConnector<AppState, AppState>(
+              converter: (store) => store.state,
+              builder: (context, state) {
+                return TransformerPageView(
+                  scrollDirection: Axis.vertical,
+                  curve: Curves.easeInBack,
+                  transformer: transformers[5], // transformers[5],
+                  itemCount: state.roomDetail.devices.length,
+                  itemBuilder: (context, index) {
+                    final deviceId = state.roomDetail.devices[index].deviceId;
+                    final activeId = state.roomDetail.devices[index].activeId;
+                    final description =
+                        state.roomDetail.devices[index].description;
+                    final functions = state.roomDetail.devices[index].functions;
+
+                    return Device(
+                        activeId: activeId,
+                        deviceId: deviceId,
+                        description: description,
+                        roomId: widget.roomId,
+                        functions: functions);
+                  },
+                );
+              })),
     );
   }
 }

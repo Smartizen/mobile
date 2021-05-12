@@ -42,7 +42,7 @@ class _RoomsState extends State<Rooms> {
                       ? Center(child: CircularProgressIndicator())
                       : Stack(
                           children: [
-                            DrawerScreen(roomId: widget.roomId),
+                            // DrawerScreen(roomId: widget.roomId),
                             RoomsScreen(
                               title: widget.title,
                               roomId: widget.roomId,
