@@ -43,8 +43,12 @@ class _DeviceState extends State<Device> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-    connectSocket();
+    if (widget.description == 'sensor')
+      connectSocket();
+    else if (widget.description == 'camera') connectStreaming();
   }
+
+  connectStreaming() {}
 
   fetchCurrentDevice() async {
     final store = StoreProvider.of<AppState>(context);
@@ -160,7 +164,17 @@ class _DeviceState extends State<Device> {
                                     crossAxisSpacing: 15,
                                     mainAxisSpacing: 15,
                                     staggeredTileBuilder: (index) {
-                                      return StaggeredTile.extent(1, 150);
+                                      return StaggeredTile.extent(
+                                          state.currentDevice.functions[index]
+                                                      .description ==
+                                                  'camera'
+                                              ? 2
+                                              : 1,
+                                          state.currentDevice.functions[index]
+                                                      .description ==
+                                                  'camera'
+                                              ? 350
+                                              : 150);
                                     },
                                     itemCount:
                                         state.currentDevice.functions.length,
@@ -244,6 +258,7 @@ class _DeviceState extends State<Device> {
                                                 MainAxisAlignment.spaceEvenly,
                                             mainAxisSize: MainAxisSize.max,
                                             children: [
+                                              // title
                                               Text(
                                                 state.currentDevice
                                                     .functions[index].name,
@@ -253,44 +268,51 @@ class _DeviceState extends State<Device> {
                                                     color: Colors.white
                                                         .withOpacity(0.7)),
                                               ),
-                                              Container(
-                                                  child: Text(
-                                                deviceData == null
-                                                    ? "Loading..."
-                                                    : state
-                                                                .currentDevice
-                                                                .functions[
-                                                                    index]
-                                                                .command ==
-                                                            null
-                                                        ? deviceData[state
-                                                                .currentDevice
-                                                                .functions[
-                                                                    index]
-                                                                .description]
-                                                            .toString()
-                                                        : deviceData[state
-                                                                    .currentDevice
-                                                                    .functions[
-                                                                        index]
-                                                                    .description] ==
-                                                                1
-                                                            ? "Bật"
-                                                            : "Tắt",
-                                                style: TextStyle(
-                                                    fontFamily: "SF Rounded",
-                                                    fontSize: 30,
-                                                    color: Colors.white
-                                                        .withOpacity(0.14)),
-                                              ))
+
+                                              // body
+                                              widget.description == 'camera'
+                                                  ? Container(
+                                                      child: Container(),
+                                                    )
+                                                  // if not camera
+                                                  : Container(
+                                                      child: Text(
+                                                      deviceData == null
+                                                          ? "Loading..."
+                                                          : state
+                                                                      .currentDevice
+                                                                      .functions[
+                                                                          index]
+                                                                      .command ==
+                                                                  null
+                                                              ? deviceData[state
+                                                                      .currentDevice
+                                                                      .functions[
+                                                                          index]
+                                                                      .description]
+                                                                  .toString()
+                                                              : deviceData[state
+                                                                          .currentDevice
+                                                                          .functions[
+                                                                              index]
+                                                                          .description] ==
+                                                                      1
+                                                                  ? "Bật"
+                                                                  : "Tắt",
+                                                      style: TextStyle(
+                                                          fontFamily:
+                                                              "SF Rounded",
+                                                          fontSize: 30,
+                                                          color: Colors.white
+                                                              .withOpacity(
+                                                                  0.14)),
+                                                    ))
                                             ],
                                           ),
                                         ),
                                       ),
                                     ),
                                   ))),
-
-                    // Expanded(child: DeviceDetails()),
                   ],
                 ));
           }),

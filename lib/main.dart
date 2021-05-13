@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.teal,
             canvasColor: AppColors.drawerBackgroundColor,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
           home: Home(),
           initialRoute: 'Home',

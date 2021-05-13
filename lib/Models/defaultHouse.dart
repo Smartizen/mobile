@@ -1,4 +1,3 @@
-import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/rooms.dart';
 
 class DefaultHouse {
