@@ -5,6 +5,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/defaultHouse.dart';
 import 'package:smartizen/Models/members.dart';
+import 'package:smartizen/Models/notifications.dart';
 import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Models/rooms.dart';
@@ -579,4 +580,39 @@ class GetMembersAction {
   final Members _members;
   Members get members => this._members;
   GetMembersAction(this._members);
+}
+
+/// Notification
+ThunkAction<AppState> getNotification(context) {
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+
+    var jsonResponse;
+
+    var response = await http.get(UrlProvider.notifications, headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      jsonResponse = jsonResponse["data"];
+      // // convert list type
+      final notifications = Notifications(
+          notifications:
+              jsonResponse.map<Noti>((noti) => Noti.fromJson(noti)).toList());
+      store.dispatch(GetNotificationsAction(notifications));
+    } else {
+      print("GetNotificationAction");
+      print(response.body);
+    }
+  };
+}
+
+class GetNotificationsAction {
+  final Notifications _notifications;
+  Notifications get notifications => this._notifications;
+  GetNotificationsAction(this._notifications);
 }

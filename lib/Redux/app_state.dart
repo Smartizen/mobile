@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:smartizen/Models/defaultHouse.dart';
 import 'package:smartizen/Models/members.dart';
+import 'package:smartizen/Models/notifications.dart';
 import 'package:smartizen/Models/roomDetail.dart';
 import 'package:smartizen/Models/houses.dart';
 
@@ -12,6 +13,7 @@ class AppState {
   final RoomDetail roomDetail;
   final Device currentDevice;
   final Members members;
+  final Notifications notifications;
 
   AppState(
       {@required this.user,
@@ -19,7 +21,8 @@ class AppState {
       @required this.defaultHouse,
       @required this.roomDetail,
       @required this.currentDevice,
-      @required this.members});
+      @required this.members,
+      @required this.notifications});
 
   factory AppState.initial() {
     return AppState(
@@ -28,6 +31,7 @@ class AppState {
         defaultHouse: null,
         roomDetail: null,
         currentDevice: null,
-        members: null);
+        members: null,
+        notifications: null);
   }
 }

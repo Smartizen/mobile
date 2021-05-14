@@ -80,4 +80,9 @@ class UrlProvider {
   static String get sendToken {
     return '$base/messaging/send-token';
   }
+
+  /// Notificaiton
+  static String get notifications {
+    return '$base/notification';
+  }
 }
