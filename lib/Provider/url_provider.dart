@@ -71,6 +71,11 @@ class UrlProvider {
     return '$socket';
   }
 
+  /// Video streaming
+  static String videoStreaming(String typeId, String deviceId) {
+    return '$socket/proxy/video/$typeId/$deviceId';
+  }
+
   /// Messaging
   static String get sendToken {
     return '$base/messaging/send-token';

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Components/alert.dart';
+import 'package:smartizen/Components/video_player.dart';
 import 'package:smartizen/Redux/action.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Provider/url_provider.dart';
@@ -43,16 +44,13 @@ class _DeviceState extends State<Device> {
   void initState() {
     super.initState();
     _speech = stt.SpeechToText();
-    if (widget.description == 'sensor')
-      connectSocket();
-    else if (widget.description == 'camera') connectStreaming();
+
+    if (widget.description == 'sensor') connectSocket();
   }
 
-  connectStreaming() {}
+  fetchCurrentDevice(store, String deviceId) async {
+    await store.dispatch(getCurrentDevice(context, deviceId));
 
-  fetchCurrentDevice() async {
-    final store = StoreProvider.of<AppState>(context);
-    await store.dispatch(getCurrentDevice(context, widget.deviceId));
     if (mounted)
       setState(() {
         _isLoading = false;
@@ -101,7 +99,8 @@ class _DeviceState extends State<Device> {
       ),
       body: StoreConnector<AppState, AppState>(
           onInit: (store) {
-            fetchCurrentDevice();
+            print("\n\ncurrent device " + widget.deviceId + "\n\n");
+            fetchCurrentDevice(store, widget.deviceId);
           },
           converter: (store) => store.state,
           builder: (context, state) {
@@ -272,7 +271,10 @@ class _DeviceState extends State<Device> {
                                               // body
                                               widget.description == 'camera'
                                                   ? Container(
-                                                      child: Container(),
+                                                      child: Expanded(
+                                                          child: VideoPlayerApp(
+                                                              deviceId: widget
+                                                                  .deviceId)),
                                                     )
                                                   // if not camera
                                                   : Container(
