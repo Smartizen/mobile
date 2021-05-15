@@ -77,9 +77,15 @@ class _MemberState extends State<Member> {
                       labelPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
                       label: Text(
                         widget.role == 0 ? "Admin" : "Member",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color:
+                                widget.role == 0 ? Colors.black : Colors.white),
                       ),
-                      // backgroundColor: const Colors(),
                       elevation: 6.0,
+                      backgroundColor: widget.role == 0
+                          ? Color(0xff3dcd98)
+                          : Colors.grey[60],
                       shadowColor: Colors.grey[60],
                       padding: EdgeInsets.all(6.0),
                     )

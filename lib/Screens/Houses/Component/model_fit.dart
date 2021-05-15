@@ -5,6 +5,7 @@ import 'package:smartizen/Models/houses.dart';
 import 'package:smartizen/Redux/app_state.dart';
 import 'package:smartizen/Screens/Home/Home.dart';
 import 'package:smartizen/Redux/action.dart';
+import 'package:smartizen/utils/app_color.dart';
 
 class ModalFit extends StatelessWidget {
   const ModalFit({Key key, @required this.housesModel}) : super(key: key);
@@ -20,18 +21,32 @@ class ModalFit extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            title: Text('Edit'),
-            leading: Icon(Icons.edit),
+            title: Text(
+              'Chỉnh sửa',
+              style: AppColors.listTitleDefaultTextStyle,
+            ),
+            leading: Icon(Icons.edit, color: Colors.white, size: 25),
             onTap: () => Navigator.of(context).pop(),
           ),
           ListTile(
-            title: Text('Sellect'),
-            leading: Icon(Icons.check_circle_outline),
+            title: Text('Chọn', style: AppColors.listTitleDefaultTextStyle),
+            leading: Icon(
+              Icons.check_circle_outline,
+              color: Colors.white,
+              size: 25,
+            ),
             onTap: () => selectHouseDefault(context, housesModel),
           ),
           ListTile(
-            title: Text('Delete'),
-            leading: Icon(Icons.delete),
+            title: Text(
+              'Xóa',
+              style: AppColors.listTitleDefaultTextStyle,
+            ),
+            leading: Icon(
+              Icons.delete,
+              color: Colors.white,
+              size: 25,
+            ),
             onTap: () => deleteHouse(context, housesModel),
           )
         ],

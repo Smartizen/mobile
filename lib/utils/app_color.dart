@@ -16,4 +16,8 @@ class AppColors {
 
   static Color selectedColor = Color(0xFF4AC8EA);
   static Color drawerBackgroundColor = Color(0xFF272D34);
+  static LinearGradient gradient = LinearGradient(
+      begin: Alignment(0.5, 0),
+      end: Alignment(0.5, 1),
+      colors: [Color(0xff7afc79), Color(0xff3ccb97)]);
 }

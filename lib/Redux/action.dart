@@ -504,12 +504,15 @@ ThunkAction<AppState> addNewMember(context, String email) {
     if (response.statusCode == 201) {
       jsonResponse = json.decode(response.body);
       jsonResponse = jsonResponse["data"];
+
+      print(jsonResponse);
       final newMember = Member(
           id: jsonResponse["id"],
           firstname: jsonResponse["firstname"],
           lastname: jsonResponse["lastname"],
           email: jsonResponse["email"],
-          role: jsonResponse["role"]);
+          role: jsonResponse["role"],
+          manageId: jsonResponse["manageId"]);
 
       store.state.members.members.add(newMember);
       store.dispatch(GetMembersAction(store.state.members));
@@ -525,7 +528,6 @@ ThunkAction<AppState> deleteManageAction(context, String manageId) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     var token = sharedPreferences.getString("token");
-
     var response =
         await http.delete(UrlProvider.getAllMember(manageId), headers: {
       'Content-Type': 'application/json',

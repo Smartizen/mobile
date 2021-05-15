@@ -60,7 +60,7 @@ class _AddHouseState extends State<AddHouse> {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.primaryBackgroud,
-          title: Text("Add House"),
+          title: Text("Xác nhận địa chỉ"),
         ),
         body: StoreConnector<AppState, AppState>(
             converter: (store) => store.state,
