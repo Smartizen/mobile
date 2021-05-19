@@ -110,8 +110,7 @@ class _HomeState extends State<Home> {
 
     await store.dispatch(auth(context));
     await store.dispatch(getHousesData(context, true));
-    await store.dispatch(getDefaultHousesData(context));
-    await store.dispatch(getMembersOfHouse(context));
+
     setState(() {
       _isLoading = false;
     });

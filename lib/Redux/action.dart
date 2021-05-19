@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
-import 'package:smartizen/Components/application_box.dart';
 import 'package:smartizen/Models/defaultHouse.dart';
 import 'package:smartizen/Models/members.dart';
 import 'package:smartizen/Models/notifications.dart';
@@ -196,9 +195,14 @@ ThunkAction<AppState> getHousesData(context, bool isSetHouse) {
         } else {
           if (isSetHouse) {
             var isHaveHouse = sharedPreferences.containsKey('houseId');
-            if (!isHaveHouse)
+            if (!isHaveHouse) {
               sharedPreferences.setString(
                   "houseId", jsonResponse['houses'][0]["id"]);
+
+              //after have house fetch default house data
+              await store.dispatch(getDefaultHousesData(context));
+              await store.dispatch(getMembersOfHouse(context));
+            }
           } else {
             store.dispatch(
                 GetHousesAction(_loadHousesModel(jsonResponse["houses"])));
