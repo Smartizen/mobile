@@ -127,6 +127,7 @@ ThunkAction<AppState> createHouse(
 
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var isHaveHouse = sharedPreferences.containsKey('houseId');
     var token = sharedPreferences.getString("token");
     var jsonResponse;
 
@@ -140,9 +141,14 @@ ThunkAction<AppState> createHouse(
       jsonResponse = jsonResponse["data"];
       sharedPreferences.setString("houseId", jsonResponse["id"]);
 
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (BuildContext context) => Houses()),
-      );
+      if (isHaveHouse)
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) => Houses()),
+        );
+      else
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (BuildContext context) => Home()),
+        );
       // TODO add to House array
     } else {
       print("createHouse");
@@ -198,15 +204,14 @@ ThunkAction<AppState> getHousesData(context, bool isSetHouse) {
             if (!isHaveHouse) {
               sharedPreferences.setString(
                   "houseId", jsonResponse['houses'][0]["id"]);
-
-              //after have house fetch default house data
-              await store.dispatch(getDefaultHousesData(context));
-              await store.dispatch(getMembersOfHouse(context));
             }
           } else {
             store.dispatch(
                 GetHousesAction(_loadHousesModel(jsonResponse["houses"])));
           }
+          //after have house fetch default house data
+          await store.dispatch(getDefaultHousesData(context));
+          await store.dispatch(getMembersOfHouse(context));
         }
       }
     } else {
