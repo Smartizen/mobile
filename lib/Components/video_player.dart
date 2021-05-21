@@ -95,6 +95,7 @@ class _VideoPlayerAppState extends State<VideoPlayerApp> {
     // TODO: implement dispose
     super.dispose();
     vlcPlayerController.dispose();
+    print("dispose");
   }
 
   void playAndPause() {
