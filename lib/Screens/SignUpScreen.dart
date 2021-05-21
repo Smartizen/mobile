@@ -60,7 +60,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   controller: passwordController,
                                   obscureText: true,
                                   decoration:
-                                      InputDecoration(hintText: 'Password'),
+                                      InputDecoration(hintText: 'Mật khẩu'),
                                 )))
                       ],
                     ),
@@ -75,8 +75,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 margin: EdgeInsets.only(right: 10, left: 10),
                                 child: TextFormField(
                                   controller: firstNameController,
-                                  decoration:
-                                      InputDecoration(hintText: 'First Name'),
+                                  decoration: InputDecoration(hintText: 'Họ'),
                                 ))),
                         Expanded(
                             child: Container(
@@ -85,8 +84,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 child: TextFormField(
                                   controller: lastNameController,
-                                  decoration:
-                                      InputDecoration(hintText: 'Last Name'),
+                                  decoration: InputDecoration(hintText: 'Tên'),
                                 )))
                       ],
                     ),
@@ -97,7 +95,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       children: <Widget>[
                         Expanded(
                           child: RadioListTile(
-                            title: const Text('Male'),
+                            title: const Text('Nam'),
                             value: Gender.MALE,
                             groupValue: _genderValue,
                             onChanged: (Gender value) {
@@ -109,7 +107,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                         Expanded(
                           child: RadioListTile(
-                            title: const Text('Female'),
+                            title: const Text('Nữ'),
                             value: Gender.FEMALE,
                             groupValue: _genderValue,
                             onChanged: (Gender value) {
@@ -204,7 +202,7 @@ class BackButtonWidget extends StatelessWidget {
                         Navigator.pop(context);
                       }),
                   Text(
-                    'Back',
+                    'Quay lại',
                     style: TextStyle(
                         color: Colors.white, fontWeight: FontWeight.bold),
                   )
@@ -215,7 +213,7 @@ class BackButtonWidget extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Create New Account',
+                'Tạo tài khoản mới',
                 style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,

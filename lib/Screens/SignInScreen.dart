@@ -68,7 +68,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                         controller: passwordController,
                                         obscureText: true,
                                         decoration: InputDecoration(
-                                            hintText: 'Password'),
+                                            hintText: 'Mật khẩu'),
                                       ))),
                             ],
                           ),
@@ -92,7 +92,7 @@ class _SignInScreenState extends State<SignInScreen> {
                                 },
                                 color: Color(0xFF00a79B),
                                 child: Text(
-                                  'SIGN IN',
+                                  'ĐĂNG NHẬP',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -112,11 +112,11 @@ class _SignInScreenState extends State<SignInScreen> {
                           child: Center(
                             child: RichText(
                               text: TextSpan(
-                                  text: 'Don\'t have an account?',
+                                  text: 'Bạn chưa có tài khoản ?',
                                   style: TextStyle(color: Colors.black),
                                   children: [
                                     TextSpan(
-                                      text: 'SIGN UP',
+                                      text: ' ĐĂNG KÝ',
                                       style: TextStyle(
                                           color: Colors.teal,
                                           fontWeight: FontWeight.bold),
