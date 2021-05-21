@@ -172,7 +172,7 @@ class _RoomsScreenState extends State<RoomsScreen> {
               converter: (store) => store.state,
               builder: (context, state) {
                 return TransformerPageView(
-                  scrollDirection: Axis.vertical,
+                  scrollDirection: Axis.horizontal,
                   curve: Curves.easeInBack,
                   transformer: transformers[5], // transformers[5],
                   itemCount: state.roomDetail.devices.length,

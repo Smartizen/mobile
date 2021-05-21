@@ -149,7 +149,6 @@ ThunkAction<AppState> createHouse(
         Navigator.of(context).push(
           MaterialPageRoute(builder: (BuildContext context) => Home()),
         );
-      // TODO add to House array
     } else {
       print("createHouse");
       print(response.body);
