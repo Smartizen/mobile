@@ -58,6 +58,29 @@ class _RoomsScreenState extends State<RoomsScreen> {
                       });
                     },
                   ),
+                  deviceName.length > 0
+                      ? Container(
+                          width: 250,
+                          child: Image.asset(
+                            'assets/device.png',
+                          ),
+                        )
+                      : GestureDetector(
+                          onTap: () async {
+                            var codeSanner =
+                                await BarcodeScanner.scan(); //barcode scnner
+                            var jsonResponse =
+                                json.decode(codeSanner.rawContent);
+
+                            mystate(() {
+                              deviceName = jsonResponse["deviceName"];
+                              deviceId = jsonResponse["deviceId"];
+                            });
+                          },
+                          child: Image.asset(
+                            'assets/scanQr.jpg',
+                          ),
+                        ),
                   new Text(
                     deviceName.length > 0
                         ? "Xác nhận kết nối : " + deviceName

@@ -39,15 +39,6 @@ class _CameraDeviceState extends State<CameraDevice> {
   }
 
   @override
-  void dispose() {
-    setState(() {
-      _turnOn = false;
-    });
-    print("turnOf");
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, AppState>(
         onInit: (store) {
