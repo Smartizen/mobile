@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smartizen/Screens/Houses/Houses.dart';
 import 'package:smartizen/Screens/SignInScreen.dart';
+import 'package:smartizen/Screens/UpdateProfile/UpdateProfile.dart';
 
 import './profile_menu.dart';
 import './profile_pic.dart';
@@ -32,9 +33,14 @@ class _ProfileBodyState extends State<ProfileBody> {
             },
           ),
           ProfileMenu(
-            text: "Cài đặt",
+            text: "Cập nhật trang cá nhân",
             icon: Icons.settings,
-            press: () {},
+            press: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                    builder: (BuildContext context) => UpdateProfile()),
+              );
+            },
           ),
           ProfileMenu(
             text: "Trợ giúp",

@@ -17,6 +17,11 @@ class UrlProvider {
     return '$base/auth/signup';
   }
 
+  /// url user
+  static String get user {
+    return '$base/users';
+  }
+
   /// url house
   static String get createNewHouse {
     return '$base/house';

@@ -79,6 +79,35 @@ ThunkAction<AppState> signup(context, String email, String password,
   };
 }
 
+ThunkAction<AppState> updateProfile(context, String firstname, String lastname,
+    String email, String phonenumber) {
+  Map data = {
+    'email': email,
+    'firstname': firstname,
+    'lastname': lastname,
+    'phonenumber': phonenumber,
+  };
+  return (Store<AppState> store) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    var token = sharedPreferences.getString("token");
+    var jsonResponse;
+
+    var response = await http.put(UrlProvider.user, body: data, headers: {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+    if (response.statusCode == 200) {
+      jsonResponse = json.decode(response.body);
+      if (jsonResponse != null) {
+        store.dispatch(GetUserAction(jsonResponse));
+      }
+    } else {
+      print("Update Profile");
+      print(response.body);
+    }
+  };
+}
+
 ThunkAction<AppState> auth(context) {
   return (Store<AppState> store) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
