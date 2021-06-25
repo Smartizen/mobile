@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class UrlProvider {
   static String base = DotEnv().env['API_URL'];
   static String socket = DotEnv().env['SOCKET'];
+  static String camera = DotEnv().env['CAMERA'];
 
   /// url auth
   static String get auth {
@@ -89,5 +90,10 @@ class UrlProvider {
   /// Notificaiton
   static String get notifications {
     return '$base/notification';
+  }
+
+  /// Turn securtity
+  static String get turnSecurity {
+    return '$camera/reportMode';
   }
 }
